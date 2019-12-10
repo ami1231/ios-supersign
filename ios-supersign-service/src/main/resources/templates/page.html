@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:fragment="page" >
+	<div class="row" th:if="${page!=null}">
+		<div th:if="${page.pages <= 10 && page.count != 0 }" class="form-group col-md-11 pagination-centered">
+			<ul class="pagination">
+				<li class="pageLink" th:each="num : ${#numbers.sequence(1, page.pages)}"
+				 th:class="${page.page == num} ? 'page-item active'" >
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${num}+')'"	th:text="${num}"></a>
+				</li>
+			</ul>
+		</div>
+		<div th:if="${page.pages > 10}" class="form-group col-md-11 pagination-centered">
+			<ul class="pagination">
+				<li class="pageLink" th:if="${page.page-3 >1}">
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${1}+')'">1..</a>
+				</li>
+				<li class="pageLink" th:if="${page.page-3 >1}">
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${page.page-5}+')'"><<</a>
+				</li>
+				
+				<li class="pageLink"  th:if="${page.page+3 < page.pages}"
+				th:each="num : ${#numbers.sequence(page.page-3 > 0 ? page.page-3 : 1, page.pages > page.page+3 ? page.page+3 : page.pages )}"
+				th:class="${page.page == num} ? 'page-item active'"
+				>
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${num}+')'"	th:text="${num}"></a>
+				</li>
+				
+				<li class="pageLink" th:if="${page.page+3 >= page.pages}"
+				th:each="num : ${#numbers.sequence(page.pages-5, page.pages)}"
+				th:class="${page.page == num} ? 'page-item active'"
+				>
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${num}+')'" th:text="${num}"></a>
+				</li>
+				
+				<li class="pageLink" th:if="${page.page+3 < page.pages}">
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${page.page+5}+')'">>></a>
+				</li>
+				<li class="pageLink" th:if="${page.page+5 < page.pages}">
+				<a class="pageLink" href="javascript:void(0);" th:onclick="'pagination('+${page.pages}+')'">..[[${page.pages}]]</a>
+				</li>
+			</ul>
+		</div>
+	</div>
+</div>
+</body>
+<script type="text/javascript" th:inline="javascript">
+</script>
+</html>

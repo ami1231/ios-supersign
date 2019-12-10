@@ -1,0 +1,30 @@
+spring:
+  session:
+    store-type: redis
+
+  datasource:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      url: jdbc:mysql://localhost:3306/signature?serverTimezone=Asia/Shanghai
+      username: root
+      password: qwe123
+
+  redis:
+      database: 0
+      host: localhost
+      port: 6379
+      password: 6dabdc717853
+      lettuce:
+        pool:
+          max-active: 100
+          max-wait: 100ms
+          max-idle: 400
+          min-idle: 10
+
+server:
+  tomcat:
+    accept-count: 100
+    max-connections: 100
+    max-threads: 20
+    min-spare-threads: 5
+
+

@@ -1,0 +1,33 @@
+version: '3'
+services:
+    mysql:
+      image: mysql:8.0.14
+      ports:
+        - "3306:3306"
+      volumes:
+        - "signature-mysql-volume:/var/lib/mysql"
+        - "./conf/mysql:/etc/mysql/conf.d"
+      environment:
+        MYSQL_ROOT_PASSWORD: 'qwe123'
+        MYSQL_DATABASE: 'signature'
+        MYSQL_USER: 'devuser'
+        MYSQL_PASSWORD: 'b2xWvit$$rbC5'
+        MYSQL_ROOT_HOST: '%'
+        TZ: "Asia/Shanghai"
+
+    redis:
+      image: redis:5.0.3
+      command: 
+         ["redis-server","/usr/local/etc/redis/redis.conf"]
+      ports:
+          - '6379:6379'
+      volumes:
+          - ./conf/redis/redis.conf:/usr/local/etc/redis/redis.conf
+          - ./data/redis:/data    
+      
+
+volumes:
+    signature-mysql-volume:
+networks:
+  signature-tier:
+    driver: bridge

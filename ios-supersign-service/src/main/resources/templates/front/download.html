@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>下载中心</title>
+    <script th:src="@{/js/jquery-3.3.1.min.js}" type="text/javascript"></script>
+    <script th:src="@{/assets/js/qrcode.min.js}"></script>
+    <script th:src="@{/assets/js/Flexible.js}"></script>
+    <!--    <script src="js/jquery-3.1.0.min.js"></script>-->
+    <link th:href="@{/assets/css/Flexible.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/index.css}" rel="stylesheet"/>
+    <link th:href="@{/assets/css/apk.css}" rel="stylesheet"/>
+    <style>
+        .mask {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            background: rgba(2, 2, 2, 0.4);
+            z-index: 1000000;
+            top: 0;
+        }
+
+        .maks-img img {
+            width: 6.906666rem;
+            height: 5.173333rem;
+            position: absolute;
+            top: 3%;
+            left: 28%;
+        }
+
+        .secondDiv {
+            width: 8rem;
+            height: 5.493333rem;
+            background-image: url("/assets/image/download/bg@2x.png");
+            background-size: 8rem 5.493333rem;
+            background-repeat: no-repeat;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            right: 5%;
+            top: 6%;
+            width: 6%;
+        }
+
+        .copy {
+            width: 6.373333rem;
+            height: 0.986666rem;
+            background-image: url('/assets/image/download/fuzhi@2x.png');
+            background-size: 6.373333rem 0.986666rem;
+            background-repeat: no-repeat;
+            margin: 4rem auto 0 auto;
+            display: flex;
+        }
+
+        .copy #url {
+            width: 6rem;
+            line-height: 0.986666rem;
+            padding-left: 0.35rem;
+            font-size: 0.4rem;
+        }
+
+        .copyBtn {
+            width: 2rem;
+            height: 1rem;
+            margin-left: 2.5rem;
+            width: 1.5rem;
+        }
+
+        #input {
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            z-index: -10;
+        }
+
+        #content {
+            line-height: 20px;
+            width: 1%;
+            text-align: center;
+            overflow: hidden;
+            z-index: -20;
+        }
+
+        .frame {
+            width: 8rem;
+            height: 5rem;
+            background-color: white;
+            border-radius: 0.5rem;
+            position: relative;
+        }
+
+        .small {
+            display: flex;
+            justify-content: center;
+            flex-flow: column;
+            align-items: center;
+        }
+
+        .small p:nth-child(1) {
+            font-size: 0.45rem;
+            font-weight: bold;
+            margin-top: 0.6rem;
+            font-family: "微软雅黑";
+        }
+
+        .small p:nth-child(2) {
+            font-size: 0.4rem;
+            margin-top: 0.2rem;
+            font-family: "微软雅黑";
+        }
+
+        .small input {
+            width: 7rem;
+            height: 1rem;
+            font-size: 0.4rem;
+            margin-top: 0.6rem;
+            border: 1px solid #b3b3b3;
+        }
+
+        .alert-footer {
+            width: 100%;
+            height: 1rem;
+            border-top: 1px solid #cccccc;
+            display: flex;
+            font-size: 0.45rem;
+            position: absolute;
+            bottom: 0;
+            align-items: center;
+            color: #3478f6;
+            justify-content: space-evenly;
+        }
+
+        .alert-footer div:nth-child(1) {
+            width: 50%;
+            height: 1rem;
+            text-align: center;
+            line-height: 1rem;
+        }
+        .apk{
+            display: none;
+        }
+        .apk-loading{
+            position: fixed;
+            left: 0;
+            top: 0;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+<div class="PC">
+    <div class="container">
+        <strong>请使用手机扫描二维码下载</strong>
+        <div><img class="pc-logo" src="https://oss.5jj34.cn/uploads/20191201/69a09537e7c0617280ea77370cca27ee.png"></div>
+        <p>万胜老虎机</p>
+        <div class="qrcode"></div>
+    </div>
+</div>
+<div class="mobile">
+    <div class="second">
+        <img alt="万胜老虎机" class="img" src="https://oss.5jj34.cn/uploads/20191201/69a09537e7c0617280ea77370cca27ee.png"/>
+        <div class="text">
+            <p>万胜老虎机</p>
+            <p></p>
+            <button class="btn">获取</button>
+            <div id="myProgress" style="display: none;">
+                <div id="myBar">0%</div>
+            </div>
+        </div>
+    </div>
+    <div class="third">
+        <div class="thirdOne">
+            <div class="thirdOneDiv">
+                <span class="starNum">5</span>
+                <div class="starImg">
+                    <img alt="" class="starImgOne" src="/assets/image/download/timg.jpg" style="display: none;">
+                    <img alt="" class="starImgTwo" src="/assets/image/download/timg.jpg" style="display: none;">
+                    <img alt="" class="starImgThree" src="/assets/image/download/timg.jpg" style="display: none;">
+                    <img alt="" class="starImgFour" src="/assets/image/download/timg.jpg" style="display: none;">
+                    <img alt="" class="starImgFive" src="/assets/image/download/timg.jpg" style="display: none;">
+                </div>
+            </div>
+            <div class="score">
+                <p>500000个评分</p>
+            </div>
+
+        </div>
+        <div class="thirdTwo">
+            <p>#59</p>
+            <p>工具</p>
+        </div>
+        <div class="thirdThree">
+            <p>4+</p>
+            <p>年龄</p>
+        </div>
+    </div>
+    <div class="fourth">
+        <div class="fourthOne">
+            <img alt="万胜老虎机" src="https://oss.5jj34.cn/uploads/20191130/8b4f0babb3bad58d9b9ae59e32c06585.jpg"/>
+        </div>
+        <div class="fourFooter">
+            <div class="iphone">
+                <img alt="" src="/assets/image/download/iphoen.png"/>
+                <p>iPhone</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="Fifth">
+        <div class="FifthOne">
+            <div class="FifthOneText">
+                <p>简介</p>
+                <p>最受欢迎的老虎机游戏，多种奖池，多种玩法，大奖爆不停。</p>
+            </div>
+            <div class="FifthOneName">
+                <p>Apple Developer</p>
+                <p>开发者</p>
+            </div>
+        </div>
+    </div>
+    <div class="Sixth">
+        <div class="SixthOne">
+            <div class="SixthODiv">
+                <p>新功能</p>
+                <p>版本历史记录</p>
+            </div>
+            <div class="SixthtDiv">
+                <p>版本 1.0.0</p>
+                <!--                <p>3 个月前</p>-->
+            </div>
+            <div class="SixthcDiv">
+                <p>最受欢迎的老虎机游戏，多种奖池，多种玩法，大奖爆不停。</p>
+            </div>
+        </div>
+    </div>
+    <div class="Seventh">
+        <div class="SeventhOne">
+            <p>信息</p>
+        </div>
+        <div class="SeventhTwo">
+            <p>开发商</p>
+            <p>Apple Developer</p>
+        </div>
+        <div class="SeventhThree">
+            <p>大小</p>
+            <p>35.9MB</p>
+        </div>
+        <div class="SeventhFour">
+            <p>类别</p>
+            <p>娱乐</p>
+        </div>
+        <div class="SeventhFive">
+            <p>兼容性</p>
+            <p>需要 iOS 9.0 或更高版本</p>
+        </div>
+        <div class="SeventhSix">
+            <p>语言</p>
+            <p>zh_CN</p>
+        </div>
+        <div class="SeventhSeven">
+            <p>年龄分级</p>
+            <p>4+</p>
+        </div>
+        <div class="SeventhEight">
+            <p>版权</p>
+            <p>万胜老虎机</p>
+        </div>
+    </div>
+    <div class="footer">
+        <div>
+            <p>免责声明：本网站仅为开发者提供App的下载和安装托管，App内的内容和运 营相关事项由App开发者负责，与本网站无关。</p>
+        </div>
+    </div>
+    <div class="mask maks-img" id="safari" style="display: none;">
+        <img alt="" src="/assets/image/download/safari.png"/>
+    </div>
+    <div class="other_ua mask" style="display: none;">
+        <div class="secondDiv">
+            <div class="copy">
+                <p id="url"> 点击复制 --></p>
+                <p class="uuid-code" id="content"></p>
+                <p class="copyBtn" id="copyBtn"></p>
+            </div>
+        </div>
+    </div>
+    <div class="mask" id="code-check" style="display: none">
+        <div class="frame">
+            <div class="small">
+                <p>提示</p>
+                <p>请输入此应用的下载码</p>
+                <input name="code" type="text"/>
+            </div>
+            <div class="alert-footer">
+                <div class="ok">确定</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="apk">
+    <div class="second22">
+        <img class="img22" src="https://oss.5jj34.cn/uploads/20191201/69a09537e7c0617280ea77370cca27ee.png" alt="" />
+        <div class="text22">
+            <p >万胜老虎机</p>
+            <p>工具</p>
+            <div class="btn22" style="background-image: url(/assets/image/download/xiazaianniu.png);">立即下载</div>
+
+            <div id="myProgress22" style="display: none;">
+                <div id="myBar22">0%</div>
+            </div>
+        </div>
+        <div class="yuan22" style="background-image: url(/assets/image/download/yuan.png);">
+            <p>Score</p>
+            <p>5.0</p>
+        </div>
+    </div>
+    <div class="third22">
+        <div class="thirdOne22">
+            <div class="thirdOneDiv22">
+                <div class="starImg22">
+                    <img class="starImgOne22" src="/assets/image/download/timg.jpg" alt=""  style="display: block;">
+                    <img class="starImgTwo22" src="/assets/image/download/timg.jpg" alt=""  style="display: block;">
+                    <img class="starImgThree22" src="/assets/image/download/timg.jpg" alt=""  style="display: block;">
+                    <img class="starImgFour22" src="/assets/image/download/timg.jpg" alt=""  style="display: block;">
+                    <img class="starImgFive22" src="/assets/image/download/timg.jpg" alt=""  style="display: block;">
+                </div>
+            </div>
+            <div class="score22">
+                <p>500000个评分</p>
+            </div>
+
+        </div>
+        <div class="thirdTwo22" style="">
+            <p>免费</p>
+        </div>
+        <div class="thirdThree22" style="">
+            <p>智能</p>
+        </div>
+    </div>
+    <div style="width: 100%;height: 0.3rem;background-color: #F7F7F7;"></div>
+    <div class="fourth22">
+        <div class="fourthOne22">
+            <img alt="万胜老虎机" src="https://oss.5jj34.cn/uploads/20191130/8b4f0babb3bad58d9b9ae59e32c06585.jpg"/>
+        </div>
+    </div>
+    <div class="Fifth22">
+        <div class="FifthOne22">
+            <div class="brief22">
+                <img src="image/biaotijuxiang.png" alt="" />
+                <p>简介</p>
+            </div>
+            <div class="FifthOneText22">
+                <div>
+                    <p>最受欢迎的老虎机游戏，多种奖池，多种玩法，大奖爆不停。</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="Sixth22">
+        <div class="SixthOne22">
+            <div class="brief22">
+                <img src="image/biaotijuxiang.png" alt="" />
+                <p>详细信息</p>
+            </div>
+            <div class="SixthOnecenter22">
+                <div class="SixthOnecentersmallone22">
+                    <p>万胜老虎机</p>
+                    <p>APP名称</p>
+                </div>
+                <div class="SixthOnecentersmalltwo22">
+                    <p>版本<span style="color: #75CAFF;">1.0.0</span></p>
+                    <p>APP名称</p>
+                </div>
+                <div class="SixthOnecentersmallfour22">
+                    <p>zh_CN</p>
+                    <p>语言</p>
+                </div>
+                <div >
+                    <p></p>
+                    <p></p>
+                </div>
+                <div class="SixthOnecentersmallfive22">
+                    <p>35.9MB</p>
+                    <p>大小</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="footer">
+        <div>
+            <p>免责声明：本网站仅为开发者提供App的下载和安装托管，App内的内容和运 营相关事项由App开发者负责，与本网站无关。</p>
+        </div>
+    </div>
+    <div class="apk-loading">
+        <img src="/assets/image/download/apkloading.png" style="width: 100%" />
+    </div>
+</div>
+<input id="status" name="status" type="hidden" value="1">
+<input id="tag" type="hidden" value="5de1d12ddceb6">
+<input id="type" type="hidden" value="1">
+<input id="download" type="hidden" value="">
+<input id="mobileconfig" type="hidden" value="https://oss.5jj34.cn/uploads/20191201/5de1d12ddceb6_sign.mobileconfig">
+<input id="download_code" type="hidden" value="">
+<input id="apk_url" type="hidden" value="">
+<script>
+    var tag = $('#tag').val(),
+        status = $('#status').val(),
+        down_url = $('#mobileconfig').val(),
+        app_type = $('#type').val(),
+        apk_url = $('#apk_url').val(),
+        download_code = $('#download_code').val(),
+        ua = navigator.userAgent.toLowerCase();
+    var  is_download = '1';
+    $(function () {
+        $('#content').text(window.location.href);
+        views();
+        if (!/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)&&
+            !(navigator.userAgent.match(/Mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2)) {
+            //PC
+            $('.mobile').remove();
+            $('.apk').remove();
+            $('.PC .container').show();
+            $('.qrcode').qrcode(window.location.href);
+            return false;
+        }
+        //安卓手机
+        if (ua.indexOf('android') > -1 || ua.indexOf('linux') > -1) {
+            $('.apk').show();
+            $('.mobile').remove();
+            if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                $('.apk-loading').show();
+                return true;
+            }
+            getapk();
+            return  true;
+        } else if (ua.indexOf('iphone') > -1||
+            (navigator.userAgent.match(/mac/) && navigator.maxTouchPoints && navigator.maxTouchPoints > 2)||
+            ua.indexOf('ipod') > -1||ua.indexOf('ipad') > -1
+        ) { //苹果手机
+            if (ua.indexOf('applewebkit') > -1 && ua.indexOf('mobile') > -1 && ua.indexOf('safari') > -1 && ua.indexOf('linux') == -1 && ua.indexOf('android') == -1) {
+                if(ua.indexOf("crios") > -1 ||ua.indexOf('mqqbrowser')>-1||ua.indexOf('baidubrowser')>-1){
+                    $('.other_ua').show();
+                    return  false;
+                }
+                if (status != 1) {
+                    $('.btn').css('background-color', 'gray');
+                    $('.btn').css('width', '2.5rem');
+                    $('.btn').unbind('click');
+                    $('.btn').html('应用已下架');
+                    return false;
+                }
+                if (download_code) {
+                    $('#code-check').show();
+                    return true;
+                } else {
+                    provision();
+                    return true;
+                }
+            } else if (ua.match(/MicroMessenger/i) == "micromessenger" || ua.match(/QQ/i) == "qq" || ua.match(/WeiBo/i) == "weibo" ||
+                ua.match(/Alipay/i) == "alipay" || ua.match(/DingTalk/i) == "dingtalk") {
+                $('#safari').show();
+                return false;
+            } else {
+                $('.other_ua').show();
+                return false;
+            }
+        } else if (ua.indexOf('Windows Phone') > -1) { //winphone手机
+            $('.apk').show();
+            $('.mobile').remove();
+            getapk();
+            return  true;
+        }
+    });
+
+    function copyArticle(event) {
+        const range = document.createRange();
+        range.selectNode(document.getElementById('content'));
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
+        alert("复制成功！");
+    }
+
+    document.getElementById('copyBtn').addEventListener('click', copyArticle, false);
+
+    $('.alert-footer').on('click', function () {
+        var valueCode = $('input[name=code]').val();
+        if (valueCode == download_code) {
+            $('#code-check').hide();
+            provision();
+        } else {
+            alert('下载码无效');
+        }
+    });
+    $('.btn22').click(function () {
+        if (apk_url) {
+            window.location.href = apk_url;
+            return true;
+        } else {
+            alert('暂不支持安卓下载');
+            return true;
+        }
+    });
+    $(".btn").click(function () {
+        $(".btn").unbind("click"); //阻止二次点击
+        if (ua.indexOf('android') > -1 || ua.indexOf('linux') > -1) {
+            if (apk_url) {
+                window.location.href = apk_url;
+                $(".btn").bind("click");
+                return true;
+            } else {
+                alert('暂不支持安卓下载');
+                $(".btn").bind("click");
+                return true;
+            }
+        }
+        /**超级签名*/
+        if (app_type == 1 && status == 1) {
+            provision();
+            $(".btn").bind("click");
+        }
+    });
+    if ($(".starNum").html() == 1) {
+        $(".starImgOne").show()
+    } else if ($(".starNum").html() == 2) {
+        $(".starImgOne").show();
+        $(".starImgTwo").show()
+    } else if ($(".starNum").html() == 3) {
+        $(".starImgOne").show();
+        $(".starImgTwo").show();
+        $(".starImgThree").show()
+    } else if ($(".starNum").html() == 4) {
+        $(".starImgOne").show();
+        $(".starImgTwo").show();
+        $(".starImgThree").show();
+        $(".starImgFour").show()
+    } else if ($(".starNum").html() == 5) {
+        $(".starImgOne").show();
+        $(".starImgTwo").show();
+        $(".starImgThree").show();
+        $(".starImgFour").show();
+        $(".starImgFive").show()
+    }
+
+    function provision() {
+        /***下载限制**/
+        if(is_download==0){
+            $('.btn').html('暂停下载');
+            $('.btn').css('background-color', 'gray');
+            $('.btn').css('width', '2.5rem');
+            $('.btn').unbind('click');
+            return false;
+        }
+        var str = navigator.userAgent.toLowerCase();
+        var ver = str.match(/cpu iphone os (.*?) like mac os/);
+        setTimeout(function () {
+            var iframe = document.createElement('iframe');
+            iframe.style.display = "none"; // 防止影响页面
+            iframe.style.height = 0; // 防止影响页面
+            iframe.src = down_url;
+            document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+            // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
+            setTimeout(function () {
+                iframe.remove();
+            }, 5 * 60 * 1000);
+        }, 1000);
+        if (ver) {
+            var version = ver[1].replace(/_/g, ".");
+            var vc = version.split('.');
+            if(vc[0]>=12){
+                if ((vc[0]==12 && vc[1]>1)||vc[0]>12) {
+                    setTimeout(function () {
+                        var iframe = document.createElement('iframe');
+                        iframe.style.display = "none"; // 防止影响页面
+                        iframe.style.height = 0; // 防止影响页面
+                        iframe.src = '/embedded.mobileprovision';
+                        document.body.appendChild(iframe); // 这一行必须，iframe挂在到dom树上才会发请求
+                        // 5分钟之后删除（onload方法对于下载链接不起作用，就先抠脚一下吧）
+                        setTimeout(function () {
+                            iframe.remove();
+                        }, 5 * 60 * 1000);
+                    }, 3000);
+                }
+            }
+        }
+
+    }
+
+    function getapk() {
+        /***下载限制**/
+        if(is_download==0){
+            $('.btn22').html('暂停下载');
+            $('.btn22').css('color', 'gray');
+            // $('.btn22').css('width', '2.5rem');
+            $('.btn22').unbind('click');
+            return false;
+        }
+        var str = navigator.userAgent.toLowerCase();
+        $.ajax({
+            url:'/index/getapk',
+            type: "POST",
+            data:{useragent:str,tag:tag},
+            success:function (res) {
+                if(res.code==200){
+                    window.location.href=res.data;
+                }else{
+                    alert(res.msg);
+                    return true;
+                }
+            }
+        })
+    }
+
+    function views() {
+        var str = navigator.userAgent.toLowerCase();
+        var ver = str.match(/cpu iphone os (.*?) like mac os/);
+        var path = window.location.href;
+        var version = '';
+        if(ver){
+            version = ver[1].replace(/_/g, ".");
+        }
+        $.ajax({
+            url:'/index/urlViews',
+            type: "POST",
+            data:{tag:tag,useragent:str,version:version,type:1,path:path},
+            success:function () {
+                return true;
+            }
+        })
+    }
+
+</script>
+</body>
+
+</html>

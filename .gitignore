@@ -1,0 +1,14 @@
+*.classpath
+*.project
+.settings/*
+**/target/*
+bin/*
+/target/
+/bin/
+docker/data/*
+.idea
+*.iml
+/work
+/logs
+/docker/*.jar
+/ios-supersign-service/docker/data/redis

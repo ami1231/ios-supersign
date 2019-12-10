@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorator="layout">
+  <head layout:fragment="contentHead">
+    <title>Error</title>
+    
+  </head>
+  <body>
+    <div layout:fragment="content">
+		<div class="row">
+			<div class="col-md-12">
+				<h3>抱歉，发生了错误!</h3>
+				错误讯息: <p th:text="${msg}">msg</p>
+			</div>
+		</div>
+	</div>
+  </body>
+</html>

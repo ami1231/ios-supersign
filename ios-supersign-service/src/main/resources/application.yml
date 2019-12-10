@@ -1,0 +1,65 @@
+server:
+  port: 8080
+  tomcat:
+    basedir: ./
+    uri-encoding: utf-8
+    protocol: org.apache.coyote.http11.Http11Nio2Protocol
+    accesslog:
+      enabled: true
+      file-date-format: .yyyy-MM-dd
+      directory: logs
+      pattern: "%{yyyy-MM-dd HH:mm:ss.SSS}t [%I] %{X-Forwarded-For}i %a %r %s (%D ms)"
+      prefix: access_log
+      suffix: .log
+      buffered: true
+      rotate: true
+      request-attributes-enabled: true
+  compression:
+    enabled: true
+    mime-types: application/json
+    min-response-size: 2KB
+
+spring:
+  profiles:
+    active: @activatedProperties@
+  application:
+    name: ios-supersign-service
+  http:
+    encoding:
+      enabled: true
+      force: true
+      charset: utf-8
+management:
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+    shutdown:
+      enabled: true
+  thymeleaf:
+    encoding: UTF-8
+    mode: HTML5
+    cache: false
+
+
+mybatis-plus:
+  mapper-locations: classpath:/mapper/*Mapper.xml
+  typeAliasesPackage: com.naoh.iossupersign.model.po
+  global-config:
+    id-type: 0
+    field-strategy: 1
+    db-column-underline: true
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    localCacheScope: STATEMENT

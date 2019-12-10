@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<property name="LOG_HOME" value="./logs/iosSuperSign" />
+	<property name="CHARSET" value="UTF-8" />
+    <property name="PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50}:%L - %msg%n" />
+	<property name="FILENAME" value="iosSuperSign" />
+	
+   	<appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- encoder默認配置為PartternLayoutEncoder    -->
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+    
+    <appender name="FILE" class="ch.qos.logback.core.FileAppender">
+        <file>${LOG_HOME}/application.log</file>
+        <encoder>
+            <pattern>${PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+	
+    <appender name="ROLLINGFILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${FILENAME}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日誌文件輸出的文件名-->
+            <FileNamePattern>${LOG_HOME}/${FILENAME}-%d{yyyy-MM-dd-HH}.log</FileNamePattern>
+            <!--日誌文件保留天數-->
+            <MaxHistory>30</MaxHistory>
+        </rollingPolicy>
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <pattern>${PATTERN}</pattern>
+            <charset>${CHARSET}</charset>
+        </encoder>
+    </appender>
+
+    
+    <root level="INFO">
+<!--         <appender-ref ref="FILE"/> -->
+        <appender-ref ref="CONSOLE"/>
+<!--         <appender-ref ref="DFILE"/> -->
+        <appender-ref ref="ROLLINGFILE"/>
+    </root>
+	
+</configuration>

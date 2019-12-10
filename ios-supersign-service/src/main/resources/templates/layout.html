@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  	<head layout:fragment="contentHead" th:insert="commonHead :: common_head(~{::title})">
+  	</head>
+  	<body>
+	  	<div th:insert="commonCss :: common_css"></div>
+	  	<div layout:fragment="contentCss"></div>
+		<div th:include="navbar :: navbar"></div>
+	    <div id="page-wrapper" layout:fragment="content">
+		</div>
+  	</body>
+  	<div th:insert="commonJs :: common_js">
+	</div>
+  	<div layout:fragment="contentJs">
+	</div>
+  	<script type="text/javascript" th:inline="javascript">
+  	</script>
+</html>
