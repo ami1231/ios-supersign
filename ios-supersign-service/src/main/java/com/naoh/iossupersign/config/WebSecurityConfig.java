@@ -40,6 +40,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //解決服務註冊url被攔截的問題
         web.ignoring().antMatchers("/swagger-resources/**");
         web.ignoring().antMatchers("/actuator/*");
+        web.ignoring().antMatchers("/mobileconfig/*");
     }
 
     @Override

@@ -107,6 +107,13 @@
             <artifactId>httpclient</artifactId>
         </dependency>
 
+        <!-- 解析plist -->
+        <dependency>
+            <groupId>com.googlecode.plist</groupId>
+            <artifactId>dd-plist</artifactId>
+            <version>1.21</version>
+        </dependency>
+
     </dependencies>
 
     <build>
