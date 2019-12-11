@@ -12,7 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-public class AppleDeviceDTO implements Serializable {
+public class AppleResultDTO implements Serializable {
 
     private String type;
 
