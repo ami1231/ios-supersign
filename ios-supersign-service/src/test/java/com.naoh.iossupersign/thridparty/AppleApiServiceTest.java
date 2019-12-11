@@ -1,8 +1,11 @@
 package com.naoh.iossupersign.thridparty;
 
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
+import com.naoh.iossupersign.model.dto.AppleResultDTO;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
 import org.junit.Test;
+
+import java.util.List;
 
 public class AppleApiServiceTest {
 
@@ -13,7 +16,8 @@ public class AppleApiServiceTest {
                 "kJ40Dem5meAQgB7d3+JwD0l/DragCgYIKoZIzj0DAQehRANCAAQ2VAOLe5wK6cHP\n" +
                 "XSd74Zbm5SWE5ITdBByJ2Ib4r/yADgr2KvSTqcbR27b4tRH0SBMy4vwOmdypZbB2\n" +
                 "eYJZaJfb").kid("5Y6JL3TGX8").build();
-        appleApiService.getNumberOfAvailableDevices(authorizeBO);
+        List<AppleResultDTO> appleResultDTOS =  appleApiService.getNumberOfAvailableDevices(authorizeBO);
+        System.out.println(appleResultDTOS);
     }
 
     @Test

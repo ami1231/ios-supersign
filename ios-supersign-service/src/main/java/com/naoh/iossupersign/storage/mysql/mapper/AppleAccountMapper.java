@@ -16,4 +16,10 @@ import java.util.List;
 @Repository
 public interface AppleAccountMapper extends BaseMapper<AppleAccountPO> {
 
+    List<AppleAccountPO> getAllAppleAccount();
+
+    List<AppleAccountPO> getLotteryAllByCondition(AppleAccountPO appleAccountPO);
+
+    AppleAccountPO getAppleAccountByAccount(String account);
+
 }

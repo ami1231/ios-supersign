@@ -18,4 +18,11 @@ public class AppleAccountService {
     }
 
 
+    public AppleAccountPO getAccountByAccount(AppleAccountPO appleAccountPO) {
+        return appleAccountMapper.getAppleAccountByAccount(appleAccountPO.getAccount());
+    }
+
+    public List<AppleAccountPO> getAllAccount() {
+        return appleAccountMapper.getAllAppleAccount();
+    }
 }
