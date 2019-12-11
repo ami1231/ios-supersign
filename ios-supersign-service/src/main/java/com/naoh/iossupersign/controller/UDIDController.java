@@ -47,7 +47,7 @@ public class UDIDController {
     }
 
     @PostMapping("/getUDID")
-    public void getUDID(HttpServletResponse response, HttpServletRequest request){
+    public void getUDID(HttpServletRequest request ,HttpServletResponse response){
         try {
             request.setCharacterEncoding("UTF-8");
             //获取HTTP请求的输入流

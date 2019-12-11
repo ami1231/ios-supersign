@@ -1,20 +1,32 @@
 package com.naoh.iossupersign.enums;
 
+import org.springframework.http.HttpMethod;
+
 public enum AppleApiEnum {
 
     /**
-     * "取得帳號設備"
+     * "Deviced-API"
      */
-    ACCOUNT_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices"),;
+    LIST_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.GET.name()),
+    REGISTER_NEW_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.POST.name()),
+    ;
+
 
     private String apiPath;
 
-    AppleApiEnum(String apiPath) {
+    private String httpMethod;
+
+    AppleApiEnum(String apiPath,String httpMethod) {
+
         this.apiPath = apiPath;
+        this.httpMethod = httpMethod;
     }
 
     public String getApiPath(){
         return apiPath;
     }
 
+    public String getHttpMethod(){
+        return httpMethod;
+    }
 }
