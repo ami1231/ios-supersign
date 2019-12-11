@@ -118,8 +118,14 @@ public class AppleApiService extends AppleApi{
 
     private AppleReqBody getProfileRelationships(String bundleId,String cerId, String devId){
 
-        AppleReqBody bundleIds = AppleReqBody.init().add("id", bundleId).add("type", "bundleIds");
-        AppleReqBody certificates = AppleReqBody.init().add("id", cerId).add("type", "certificates");
+        AppleReqBody bundle = AppleReqBody.init().add("id", bundleId).add("type", "bundleIds");
+        AppleReqBody bundleIds = AppleReqBody.init().add("data", bundle);
+
+
+        AppleReqBody certificate = AppleReqBody.init().add("id", cerId).add("type", "certificates");
+        List<AppleReqBody> certificatesList = new ArrayList<>();
+        certificatesList.add(certificate);
+        AppleReqBody certificates = AppleReqBody.init().add("data", certificatesList);
 
         List<AppleReqBody> deviceList = new ArrayList<>();
         AppleReqBody device = AppleReqBody.init().add("id", devId).add("type", "devices");
