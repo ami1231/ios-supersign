@@ -7,16 +7,16 @@ public enum AppleApiEnum {
     /**
      * "Deviced-API"
      */
-    LIST_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.GET.name()),
-    REGISTER_NEW_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.POST.name()),
+    LIST_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.GET),
+    REGISTER_NEW_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.POST),
     ;
 
 
     private String apiPath;
 
-    private String httpMethod;
+    private HttpMethod httpMethod;
 
-    AppleApiEnum(String apiPath,String httpMethod) {
+    AppleApiEnum(String apiPath,HttpMethod httpMethod) {
 
         this.apiPath = apiPath;
         this.httpMethod = httpMethod;
@@ -26,7 +26,7 @@ public enum AppleApiEnum {
         return apiPath;
     }
 
-    public String getHttpMethod(){
+    public HttpMethod getHttpMethod(){
         return httpMethod;
     }
 }

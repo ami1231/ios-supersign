@@ -31,6 +31,8 @@ public class AppleApiService extends AppleApi{
         String url = AppleApiEnum.LIST_DEVICE_API.getApiPath();
 
 
+        restTemplate.exchange(url,AppleApiEnum.LIST_DEVICE_API.getHttpMethod(),)
+
 
         String result = HttpRequest.get(url).
                 addHeaders(header).
