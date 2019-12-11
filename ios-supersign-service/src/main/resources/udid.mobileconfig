@@ -5,7 +5,7 @@
         <key>PayloadContent</key>
         <dict>
             <key>URL</key>
-            <string>https://dev.skyfox.org/udid/receive.php</string> <!--接收数据的接口地址-->
+            <string>https://c527b9f7.ngrok.io/mobileconfig/getUDID</string>
             <key>DeviceAttributes</key>
             <array>
                 <string>SERIAL</string>
@@ -18,17 +18,17 @@
             </array>
         </dict>
         <key>PayloadOrganization</key>
-        <string>@@PayloadOrganization</string>  <!--组织名称-->
+        <string>@@PayloadOrganization</string>
         <key>PayloadDisplayName</key>
-        <string>@@PayloadDisplayName</string>  <!--描述檔title-->
+        <string>@@PayloadDisplayName</string>
         <key>PayloadVersion</key>
         <integer>1</integer>
         <key>PayloadUUID</key>
-        <string>@@PayloadUUID</string>  <!--自己随机填写的唯一字符串 https://www.guidgen.com/ -->
+        <string>@@PayloadUUID</string>
         <key>PayloadIdentifier</key>
         <string>online.naoh.profile-service</string>
         <key>PayloadDescription</key>
-        <string>本文件仅用来获取设备ID</string>   <!--描述檔说明-->
+        <string>本文件仅用来获取设备ID</string>
         <key>PayloadType</key>
         <string>Profile Service</string>
     </dict>
