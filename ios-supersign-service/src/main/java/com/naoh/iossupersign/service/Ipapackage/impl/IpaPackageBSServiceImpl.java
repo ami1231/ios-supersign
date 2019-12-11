@@ -1,12 +1,12 @@
-package com.naoh.iossupersign.service.Ipa.impl;
+package com.naoh.iossupersign.service.Ipapackage.impl;
 
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ZipUtil;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
-import com.naoh.iossupersign.model.po.IpaPO;
-import com.naoh.iossupersign.service.Ipa.IpaBSService;
+import com.naoh.iossupersign.model.po.IpaPackagePO;
+import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,7 @@ import java.io.File;
  */
 @Service
 @Slf4j
-public class IpaBSServiceImpl implements IpaBSService {
+public class IpaPackageBSServiceImpl implements IpaPackageBSService {
 
     private static final String FILE_NAME_SPLIT = ".";
 
@@ -34,8 +34,8 @@ public class IpaBSServiceImpl implements IpaBSService {
         if (suffix.equalsIgnoreCase(FILE_NAME)) {
             // 上传的文件为ipa文件
             try {
-                IpaPO ipaPO = analyze(file, summary);
-                log.info("ipa detail : {}",ipaPO);
+                IpaPackagePO ipaPackagePO = analyze(file, summary);
+                log.info("ipa detail : {}", ipaPackagePO);
 
             } catch (Exception e) {
                 // 解析失敗
@@ -48,7 +48,7 @@ public class IpaBSServiceImpl implements IpaBSService {
         }
     }
 
-    private IpaPO analyze(MultipartFile file, String summary) throws Exception{
+    private IpaPackagePO analyze(MultipartFile file, String summary) throws Exception{
 
         File excelFile = File.createTempFile(UUID.randomUUID().toString(), ".ipa");
         file.transferTo(excelFile);
@@ -70,7 +70,7 @@ public class IpaBSServiceImpl implements IpaBSService {
             System.out.println("ipa文件上传完成");
         }
 //        Package pck = packageService.getPackageByBundleIdentifier(id);
-        return IpaPO.builder()
+        return IpaPackagePO.builder()
                 .name(name)
                 .version(version)
                 .buildVersion(buildVersion)

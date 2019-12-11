@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.naoh.iossupersign.storage.mysql.mapper.IpaPackageMapper">
+
+    <sql id="Base_Column_List">
+    id, `name`, icon, version, build_version, mini_version, bundle_identifier,
+    link, mobileconfig, summary, create_time, `count`
+  </sql>
+
+    <select id="selectPage" resultType="IpaPackagePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ipa_package
+    </select>
+
+
+
+</mapper>

@@ -9,6 +9,8 @@ public enum AppleApiEnum {
      */
     LIST_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.GET),
     REGISTER_NEW_DEVICE_API("https://api.appstoreconnect.apple.com/v1/devices",HttpMethod.POST),
+
+    CREATE_PROFILE_API("https://api.appstoreconnect.apple.com/v1/profiles", HttpMethod.POST),
     ;
 
 

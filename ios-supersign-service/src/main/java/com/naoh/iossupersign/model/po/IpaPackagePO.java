@@ -16,7 +16,7 @@ import java.io.Serializable;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class IpaPO implements Serializable {
+public class IpaPackagePO implements Serializable {
 
     @ApiModelProperty(value = "id")
     private long id;
@@ -24,7 +24,7 @@ public class IpaPO implements Serializable {
     @ApiModelProperty(value = "包名")
     private String name;
 
-    @ApiModelProperty(value = "图标")
+    @ApiModelProperty(value = "图标位置")
     private String icon;
 
     @ApiModelProperty(value = "版本")

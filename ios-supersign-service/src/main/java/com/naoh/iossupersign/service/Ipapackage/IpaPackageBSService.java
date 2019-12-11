@@ -1,4 +1,4 @@
-package com.naoh.iossupersign.service.Ipa;
+package com.naoh.iossupersign.service.Ipapackage;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @author Peter.Hong
  * @date 2019/12/11
  */
-public interface IpaBSService {
+public interface IpaPackageBSService {
 
     void uploadIpa(MultipartFile file, String summary);
 
