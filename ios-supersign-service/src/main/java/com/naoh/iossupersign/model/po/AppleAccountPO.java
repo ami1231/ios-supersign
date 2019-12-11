@@ -1,17 +1,18 @@
 package com.naoh.iossupersign.model.po;
 
-import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ApplePO {
+public class AppleAccountPO {
 
   @ApiModelProperty(value = "id")
   private long id;
@@ -41,6 +42,6 @@ public class ApplePO {
   private String bundleIds;
 
   @ApiModelProperty(value = "添加时间")
-  private long createTime;
+  private LocalDateTime createTime;
 
 }
