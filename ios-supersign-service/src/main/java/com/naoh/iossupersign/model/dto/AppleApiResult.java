@@ -14,7 +14,7 @@ public class AppleApiResult<T> implements Serializable {
 
     private T data;
 
-    private Map<String,?> links;
+    private Map<String,Object> links;
 
-    private Map<String,?> meta;
+    private Map<String,Object> meta;
 }
