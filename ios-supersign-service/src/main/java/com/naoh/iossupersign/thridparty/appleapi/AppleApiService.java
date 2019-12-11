@@ -39,7 +39,13 @@ public class AppleApiService extends AppleApi{
         return responseBody.getData();
     }
 
-    public String registerNewDevice(String udid , AuthorizeBO authorizeBO){
+    /**
+     * 註冊新設備到蘋果帳號
+     * @param udid
+     * @param authorizeBO
+     * @return
+     */
+    public AppleDeviceDTO registerNewDevice(String udid , AuthorizeBO authorizeBO){
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
 
         AppleReqBody attributes = AppleReqBody.init().add("name", udid).add("udid", udid).add("platform", "IOS");
@@ -47,15 +53,10 @@ public class AppleApiService extends AppleApi{
         AppleReqBody data = AppleReqBody.init().add("data",body);
         HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(data,headers);
         String url = AppleApiEnum.LIST_DEVICE_API.getApiPath();
-
-        ResponseEntity<String> response = restTemplate.exchange(url,AppleApiEnum.LIST_DEVICE_API.getHttpMethod(),httpEntity,
-                String.class);
-        System.out.println(response.getBody());
-        return response.getBody();
+        ResponseEntity<AppleApiResult<AppleDeviceDTO>> response = restTemplate.exchange(url,AppleApiEnum.REGISTER_NEW_DEVICE_API.getHttpMethod(),httpEntity,
+                new ParameterizedTypeReference<AppleApiResult<AppleDeviceDTO>>(){});
+        return response.getBody().getData();
     }
-
-
-
 
 
 }
