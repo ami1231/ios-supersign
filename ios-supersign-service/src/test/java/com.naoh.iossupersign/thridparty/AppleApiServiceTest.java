@@ -19,6 +19,16 @@ public class AppleApiServiceTest {
     }
 
     @Test
+    public void testRegisterNewDevice(){
+        AuthorizeBO authorizeBO = AuthorizeBO.builder().iss("69a6de94-ff66-47e3-e053-5b8c7c11a4d1").p8("MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQg4CteTCBEHO10Zioa\n" +
+                "kJ40Dem5meAQgB7d3+JwD0l/DragCgYIKoZIzj0DAQehRANCAAQ2VAOLe5wK6cHP\n" +
+                "XSd74Zbm5SWE5ITdBByJ2Ib4r/yADgr2KvSTqcbR27b4tRH0SBMy4vwOmdypZbB2\n" +
+                "eYJZaJfb").kid("5Y6JL3TGX8").build();
+        appleApiService.registerNewDevice("16dcbc19dd33a942ef5b23f15be282bee8ca6bd3",authorizeBO);
+
+    }
+
+    @Test
     public void testUdidProfile(){
         AuthorizeBO authorizeBO = AuthorizeBO.builder().iss("c36c96df-84bb-4a84-9eb7-dc4e7dbe3f76")
                 .p8("MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgncr4nK751LxBgcds\n" +
