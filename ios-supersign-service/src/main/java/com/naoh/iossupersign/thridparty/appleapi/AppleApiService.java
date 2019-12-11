@@ -96,78 +96,39 @@ public class AppleApiService extends AppleApi{
     }
 
 
-    public File getMobileprovision(AppleAccountPO applePO, String devId){
+    public File getMobileprovision(AuthorizeBO authorizeBO, String bundleId, String cerId, String devId){
 
-        Map<String, Object> requestData = new HashMap<>();
+        HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
 
-        Map<String, Object> profileCreateRequest = new HashMap<>();
-        profileCreateRequest.put("attributes", getAttributes());
-        profileCreateRequest.put("relationships", getRelationships(applePO, devId));
-        profileCreateRequest.put("type", "profiles");
+        AppleReqBody attributes = AppleReqBody.init().add("name", "Mobileprovision123").add("profileType", "IOS_APP_DEVELOPMENT");
+        AppleReqBody relationships = getProfileRelationships(bundleId, cerId, devId);
+        AppleReqBody body = AppleReqBody.init().add("attributes", attributes).add("relationships", relationships).add("type","profiles");
+        AppleReqBody data = AppleReqBody.init().add("data",body);
 
-        requestData.put("data", profileCreateRequest);
 
+        HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(data,headers);
         String url = AppleApiEnum.CREATE_PROFILE_API.getApiPath();
-//        restTemplate.exchange(url, AppleApiEnum.CREATE_PROFILE_API.getHttpMethod(), )
 
+        ResponseEntity<AppleApiResult<AppleResultDTO>> response = restTemplate.exchange(url,AppleApiEnum.CREATE_PROFILE_API.getHttpMethod(),httpEntity,
+                new ParameterizedTypeReference<AppleApiResult<AppleResultDTO>>(){});
+        System.out.println(response.getBody().getData());
         File file = null;
         return file;
     }
 
-    private Map<String, Object> getAttributes(){
-        Map<String, Object> attributes = new HashMap<>();
-        attributes.put("name", "Mobileprovision123");
-        attributes.put("profileType", "IOS_APP_DEVELOPMENT");
-        return attributes;
-    }
+    private AppleReqBody getProfileRelationships(String bundleId,String cerId, String devId){
 
-    private Map<String, Object> getRelationships(AppleAccountPO applePO, String devId){
-        Map<String, Object> relationships = new HashMap<>();
-        relationships.put("bundleId", getBundleId(applePO));
-        relationships.put("certificates", getCertificates(applePO));
-        relationships.put("devices", getDevices(devId));
+        AppleReqBody bundleIds = AppleReqBody.init().add("id", bundleId).add("type", "bundleIds");
+        AppleReqBody certificates = AppleReqBody.init().add("id", cerId).add("type", "certificates");
+
+        List<AppleReqBody> deviceList = new ArrayList<>();
+        AppleReqBody device = AppleReqBody.init().add("id", devId).add("type", "devices");
+        deviceList.add(device);
+        AppleReqBody devices = AppleReqBody.init().add("data", deviceList);
+
+        AppleReqBody relationships = AppleReqBody.init().add("bundleId", bundleIds).add("certificates", certificates)
+                .add("devices", devices);
         return relationships;
     }
-
-    private Map<String, Object> getBundleId(AppleAccountPO applePO){
-        Map<String, Object> bundleId = new HashMap<>();
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", applePO.getBundleIds());
-        data.put("type", "bundleIds");
-
-        bundleId.put("data", data);
-
-        return bundleId;
-    }
-
-    private Map<String, Object> getCertificates(AppleAccountPO applePO){
-        Map<String, Object> certificates = new HashMap<>();
-        List<Map<String, Object>> list = new ArrayList<>();
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", applePO.getCerId());
-        data.put("type", "certificates");
-
-        list.add(data);
-
-        certificates.put("data", list);
-        return certificates;
-    }
-
-    private Map<String, Object> getDevices(String devId) {
-        Map<String, Object> devices = new HashMap<>();
-        List<Map<String, Object>> list = new ArrayList<>();
-
-        Map<String, Object> data = new HashMap<>();
-        data.put("id", devId);
-        data.put("type", "devices");
-
-        list.add(data);
-        devices.put("data", list);
-
-        return devices;
-    }
-
 
 }
