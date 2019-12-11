@@ -14,7 +14,15 @@ public enum AppleApiEnum {
      */
     REGISTER_NEW_BUNDLEID_API("https://api.appstoreconnect.apple.com/v1/bundleIds",HttpMethod.POST),
 
+    /**
+     * Profile-API
+     */
     CREATE_PROFILE_API("https://api.appstoreconnect.apple.com/v1/profiles", HttpMethod.POST),
+
+    /**
+     * Certificates-API
+     */
+    NEW_CERTIFICATES_API("https://api.appstoreconnect.apple.com/v1/certificates", HttpMethod.POST),
     ;
 
 

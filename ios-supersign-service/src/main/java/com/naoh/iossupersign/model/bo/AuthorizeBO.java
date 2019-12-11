@@ -17,8 +17,4 @@ public class AuthorizeBO {
 
     private String kid;
 
-    private String bundleIds;
-
-    private String cerId;
-
 }

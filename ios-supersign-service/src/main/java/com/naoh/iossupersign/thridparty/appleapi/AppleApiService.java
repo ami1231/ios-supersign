@@ -137,4 +137,18 @@ public class AppleApiService extends AppleApi{
         return relationships;
     }
 
+    public AppleResultDTO insertCertificates(AuthorizeBO authorizeBO){
+        HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
+
+        AppleReqBody attributes = AppleReqBody.init().add("csrContent", authorizeBO.getCsr()).add("certificateType", "IOS_DEVELOPMENT");
+        AppleReqBody body = AppleReqBody.init().add("type", "certificates").add("attributes", attributes);
+        AppleReqBody data = AppleReqBody.init().add("data",body);
+        HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(data,headers);
+        String url = AppleApiEnum.NEW_CERTIFICATES_API.getApiPath();
+        ResponseEntity<AppleApiResult<AppleResultDTO>> response = restTemplate.exchange(url,AppleApiEnum.NEW_CERTIFICATES_API.getHttpMethod(),httpEntity,
+                new ParameterizedTypeReference<AppleApiResult<AppleResultDTO>>(){});
+        System.out.println(response.getBody().getData());
+        return response.getBody().getData();
+    }
+
 }
