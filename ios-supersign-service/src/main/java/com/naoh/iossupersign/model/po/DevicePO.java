@@ -26,4 +26,5 @@ public class DevicePO {
 
   @ApiModelProperty(value = "设备在开发者后台id")
   private String deviceId;
+
 }
