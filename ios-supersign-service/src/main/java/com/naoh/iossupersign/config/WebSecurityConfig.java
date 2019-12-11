@@ -38,8 +38,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/front-awesome/**");
         web.ignoring().antMatchers("/bootstrap/**");
         //解決服務註冊url被攔截的問題
-        web.ignoring().antMatchers("/swagger-resources/**");
+        web.ignoring().antMatchers("/ipa/uploadPackage");
         web.ignoring().antMatchers("/actuator/*");
+        web.ignoring().antMatchers("/v2/api-docs", "/configuration/ui", "/swagger-resources/**", "/configuration/**", "/swagger-ui.html", "/webjars/**");
     }
 
     @Override

@@ -29,6 +29,9 @@ spring:
       enabled: true
       force: true
       charset: utf-8
+  servlet:
+    multipart:
+      location: /Users/hongyi/Desktop/data
 management:
   health:
     redis:
@@ -63,3 +66,10 @@ mybatis-plus:
     map-underscore-to-camel-case: true
     cache-enabled: false
     localCacheScope: STATEMENT
+
+swagger:
+  config:
+    basePackage: com.naoh.iossupersign.controller
+    title: ${spring.application.name}
+    description: ${spring.application.name} restful api
+    version: 1.0
