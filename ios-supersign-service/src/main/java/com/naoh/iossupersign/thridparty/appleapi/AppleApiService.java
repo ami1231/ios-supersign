@@ -2,71 +2,46 @@ package com.naoh.iossupersign.thridparty.appleapi;
 
 import cn.hutool.http.HttpRequest;
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.naoh.iossupersign.enums.AppleApiEnum;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
+
 import com.naoh.iossupersign.model.po.ApplePO;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import com.naoh.iossupersign.model.dto.AppleApiResult;
+import com.naoh.iossupersign.model.dto.AppleDeviceDTO;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 @Service
 public class AppleApiService extends AppleApi{
 
-    @Autowired
-    private RestTemplate restTemplate;
+//    @Autowired
+    private RestTemplate restTemplate = new RestTemplate();
 
     /**
      * 取得帳號下的設備資訊
      * @param authorizeBO
      * @return
      */
-    public Map<String,String> getNumberOfAvailableDevices(AuthorizeBO authorizeBO) {
-        Map header = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
-        Map<String,String> res = new HashMap<>();
+    public List<AppleDeviceDTO> getNumberOfAvailableDevices(AuthorizeBO authorizeBO) {
+        HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
+        HttpEntity<String> httpEntity = new HttpEntity<>(headers);
         String url = AppleApiEnum.LIST_DEVICE_API.getApiPath();
-
-
-//        restTemplate.exchange(url,AppleApiEnum.LIST_DEVICE_API.getHttpMethod(),)
-
-
-        String result = HttpRequest.get(url).
-                addHeaders(header).
-                execute().body();
-        Map map = JSON.parseObject(result, Map.class);
-        System.out.println(result);
-        JSONArray data = (JSONArray)map.get("data");
-        List devices = new LinkedList();
-        for (Object datum : data) {
-            Map device = new HashMap();
-            Map m = (Map) datum;
-            String id = (String)m.get("id");
-            Map attributes = (Map)m.get("attributes");
-            String udid = (String)attributes.get("udid");
-            device.put("deviceId", id);
-            device.put("udid", udid);
-            devices.add(device);
-        }
-//        removeCertificates(header);
-//        removeBundleIds(header);
-//        String cerId = insertCertificates(header, authorize.getCsr());
-//        String bundleIds = insertBundleIds(header);
-//        Map meta = (Map) map.get("meta");
-//        Map paging = (Map)meta.get("paging");
-//        int total = (int) paging.get("total");
-//        res.put("number", Config.total-total);
-//        res.put("devices", devices);
-//        res.put("cerId", cerId);
-//        res.put("bundleIds", bundleIds);
-        System.out.println(res);
-        return res;
+        ResponseEntity<AppleApiResult<List<AppleDeviceDTO>>> response = restTemplate.exchange(url,AppleApiEnum.LIST_DEVICE_API.getHttpMethod(),httpEntity,
+                new ParameterizedTypeReference<AppleApiResult<List<AppleDeviceDTO>>>(){});
+        AppleApiResult<List<AppleDeviceDTO>> responseBody = response.getBody();
+        return responseBody.getData();
     }
 
     public String addDeviceUdidToAppleAccount(String udid , AuthorizeBO authorizeBO){
@@ -80,13 +55,13 @@ public class AppleApiService extends AppleApi{
         Map data = new HashMap();
         data.put("data", body);
         String url = AppleApiEnum.REGISTER_NEW_DEVICE_API.getApiPath();
-        String result = HttpRequest.post(url).
-                addHeaders(getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid())).
-                body(JSON.toJSONString(data)).execute().body();
-        Map map = JSON.parseObject(result, Map.class);
-        Map data1 = (Map) map.get("data");
-        String id = (String)data1.get("id");
-        return id;
+//        String result = HttpRequest.post(url).
+//                addHeaders(getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid())).
+//                body(JSON.toJSONString(data)).execute().body();
+//        Map map = JSON.parseObject(result, Map.class);
+//        Map data1 = (Map) map.get("data");
+//        String id = (String)data1.get("id");
+        return "";
     }
 
 
@@ -102,7 +77,7 @@ public class AppleApiService extends AppleApi{
         requestData.put("data", profileCreateRequest);
 
         String url = AppleApiEnum.CREATE_PROFILE_API.getApiPath();
-        restTemplate.exchange(url, AppleApiEnum.CREATE_PROFILE_API.getHttpMethod(), )
+//        restTemplate.exchange(url, AppleApiEnum.CREATE_PROFILE_API.getHttpMethod(), )
 
         File file = null;
         return file;

@@ -4,15 +4,14 @@ import cn.hutool.core.codec.Base64;
 import io.jsonwebtoken.JwsHeader;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.http.HttpHeaders;
 import sun.security.ec.ECPrivateKeyImpl;
 
 import java.security.InvalidKeyException;
-import java.util.HashMap;
-import java.util.Map;
 
 public abstract class AppleApi {
 
-    protected Map<String,String> getToken(String p8, String iss, String kid) {
+    protected HttpHeaders getToken(String p8, String iss, String kid) {
         String s = p8.
                 replace("-----BEGIN PRIVATE KEY-----", "").
                 replace("-----END PRIVATE KEY-----", "");
@@ -32,9 +31,9 @@ public abstract class AppleApi {
         } catch (InvalidKeyException e) {
             e.printStackTrace();
         }
-        Map<String,String> map = new HashMap();
-        map.put("Content-Type", "application/json");
-        map.put("Authorization", "Bearer " + token);
-        return map;
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Type", "application/json");
+        headers.add("Authorization", "Bearer " + token);
+        return headers;
     }
 }
