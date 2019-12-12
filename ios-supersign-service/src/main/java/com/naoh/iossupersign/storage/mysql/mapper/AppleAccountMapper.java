@@ -7,8 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 /**
  * @author Ami.Tsai
  * @date 2019/12/10
@@ -17,11 +15,9 @@ import java.util.List;
 @Repository
 public interface AppleAccountMapper extends BaseMapper<AppleAccountPO> {
 
-    List<AppleAccountPO> getAllAppleAccount();
-
-    List<AppleAccountPO> getLotteryAllByCondition(AppleAccountPO appleAccountPO);
-
     AppleAccountPO getAppleAccountByAccount(String account);
 
     Page<AppleAccountPO> selectAppleAccountByCondition(Page<AppleAccountPO> page, @Param("appleAccountPO") AppleAccountPO appleAccountPO);
+
+    AppleAccountPO getAccountById(Long id);
 }

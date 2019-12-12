@@ -16,4 +16,6 @@ import java.util.List;
 public interface DeviceMapper extends BaseMapper<DevicePO> {
 
     void insertList(List<DevicePO> devicePOS);
+
+    DevicePO getDeviceByUdid(String udid);
 }

@@ -16,4 +16,8 @@ public class DeviceService {
     public void insertList(List<DevicePO> devicePOS) {
         deviceMapper.insertList(devicePOS);
     }
+
+    public DevicePO getDeviceByUdid(String udid) {
+       return deviceMapper.getDeviceByUdid(udid);
+    }
 }

@@ -23,5 +23,9 @@ public class DeviceBSService {
         return true;
     }
 
+    public DevicePO getDeviceByUdid(String udid){
+       return deviceService.getDeviceByUdid(udid);
+    }
+
 
 }

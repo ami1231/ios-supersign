@@ -6,23 +6,29 @@
         id,udid,apple_id,device_id,creat_time
     </sql>
 
-    <insert id="insert" parameterType="com.naoh.iossupersign.model.po.AppleAccountPO">
-    insert into apple_account (udid,apple_id,device_id,creat_time)
+    <insert id="insert" parameterType="com.naoh.iossupersign.model.po.DevicePO">
+    insert into device (udid,apple_id,device_id,creat_time)
         values (
             #{udid,jdbcType=VARCHAR},
-            #{apple_id,jdbcType=INTEGER},
-            #{device_id,jdbcType=VARCHAR},
-            #{creat_time,jdbcType=TIMESTAMP})
+            #{appleId,jdbcType=INTEGER},
+            #{deviceId,jdbcType=VARCHAR},
+            #{creatTime,jdbcType=TIMESTAMP})
   </insert>
 
     <insert id="insertList" parameterType="java.util.List">
-        insert into apple_account (udid,apple_id,device_id,creat_time)
+        insert into device (udid,apple_id,device_id,creat_time)
         values
         <foreach collection="devicePOS" item="record" index="index"
                  separator=",">
-            (#{record.udid,jdbcType=VARCHAR}, #{record.apple_id,jdbcType=INTEGER},
-            #{record.device_id,jdbcType=VARCHAR}, #{record.creat_time,jdbcType=TIMESTAMP})
+            (#{record.udid,jdbcType=VARCHAR}, #{record.appleId,jdbcType=INTEGER},
+            #{record.deviceId,jdbcType=VARCHAR}, #{record.creatTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
+
+    <select id="getDeviceByUdid" resultSetType="DevicePO">
+      select <include refid="Base_Column_List"/>
+        from device
+        where udid = #{udid,jdbcType=VARCHAR},
+    </select>
 
 </mapper>

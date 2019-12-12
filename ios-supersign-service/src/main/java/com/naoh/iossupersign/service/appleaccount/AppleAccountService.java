@@ -23,11 +23,11 @@ public class AppleAccountService {
         return appleAccountMapper.getAppleAccountByAccount(appleAccountPO.getAccount());
     }
 
-    public List<AppleAccountPO> getAllAccount() {
-        return appleAccountMapper.getAllAppleAccount();
-    }
-
     public Page<AppleAccountPO> selectAppleAccountByCondition(Page<AppleAccountPO> page, AppleAccountPO appleAccountPO) {
        return appleAccountMapper.selectAppleAccountByCondition(page , appleAccountPO);
+    }
+
+    public AppleAccountPO getAccountById(Long id) {
+        return appleAccountMapper.getAccountById(id);
     }
 }

@@ -81,4 +81,12 @@ public class AppleAccountBSService {
     public AppleAccountPO getAccountByAccount(AppleAccountPO appleAccountPO) {
        return appleAccountService.getAccountByAccount(appleAccountPO);
     }
+
+    public AppleAccountPO getAccountById(Long id) {
+        return appleAccountService.getAccountById(id);
+    }
+
+    public AppleAccountPO selectBestAppleAccount() {
+        return null;
+    }
 }

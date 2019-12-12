@@ -38,5 +38,12 @@
         #{createTime,jdbcType=TIMESTAMP})
   </insert>
 
+    <select id="getAppleAccountByAccount" resultType="AppleAccountPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM apple_account
+        WHERE id = #{id}
+    </select>
+
 
 </mapper>
