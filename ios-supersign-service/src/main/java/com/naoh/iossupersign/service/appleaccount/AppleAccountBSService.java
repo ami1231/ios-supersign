@@ -1,28 +1,36 @@
 package com.naoh.iossupersign.service.appleaccount;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.naoh.iossupersign.enums.ServiceError;
+import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
 import com.naoh.iossupersign.model.dto.AppleResultDTO;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class AppleAccountBSService {
 
-    @Autowired
-    private AppleApiService appleApiService;
+    private final AppleApiService appleApiService;
 
-    @Autowired
-    private AppleAccountService appleAccountService;
+    private final AppleAccountService appleAccountService;
 
-    @Autowired
-    private DeviceBSService deviceBSService;
+    private final DeviceBSService deviceBSService;
+
+    public AppleAccountBSService(AppleApiService appleApiService, AppleAccountService appleAccountService, DeviceBSService deviceBSService) {
+        this.appleApiService = appleApiService;
+        this.appleAccountService = appleAccountService;
+        this.deviceBSService = deviceBSService;
+    }
 
     /**
      * 添加蘋果帳號
@@ -53,11 +61,16 @@ public class AppleAccountBSService {
         deviceBSService.insertList(appleDeviceDataList,appleAccountPO.getId());
     }
 
-    public AppleAccountPO getAccountByAccount(AppleAccountPO appleAccountPO) {
-        return appleAccountService.getAccountByAccount(appleAccountPO);
+    public Page<AppleAccountPO> selectAppleAccountByCondition(@NotNull Integer currentPage , AppleAccountPO appleAccountPO) {
+        if (Objects.isNull(currentPage) || currentPage <= 0) {
+            throw new ServiceException(ServiceError.INVALID_PARAMETER);
+        }
+        Page<AppleAccountPO> page = new Page<>();
+        page.setCurrent(currentPage.longValue());
+        return appleAccountService.selectAppleAccountByCondition(page, appleAccountPO);
     }
 
-    public List<AppleAccountPO> getAllAccount() {
-        return appleAccountService.getAllAccount();
+    public AppleAccountPO getAccountByAccount(AppleAccountPO appleAccountPO) {
+       return appleAccountService.getAccountByAccount(appleAccountPO);
     }
 }

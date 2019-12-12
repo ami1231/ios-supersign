@@ -18,32 +18,23 @@
 						<tr>
 							<th>ID</th>
 							<th>苹果账号</th>
-							<th>团队名称</th>
-							<th>团队id</th>
 							<th>已用</th>
 							<th>添加时间</th>
 							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody id="sortable">
-						<td>1</td>
-						<td>test123</td>
-						<td>test456</td>
-						<td>test111222</td>
-						<td>是</td>
-						<td>2019-12-09 19:37:18</td>
-						<td>刪除</td>
-						<!--<tr th:if="${#lists.isEmpty(accList)}" class="indexData">-->
-							<!--<td colspan="3" style="text-align: center;">查无数据</td>-->
-						<!--</tr>-->
-						<!--<tr th:unless="${#lists.isEmpty(accList)}" class="indexData" th:each="item : ${accList}" th:id="'dataTr' + ${item.id}">-->
-							<!--<td width="20%">[[${item.member}]]</td>-->
-							<!--<td width="20%">[[${item.name}]]</td>-->
-							<!--<td width="20%">[[${#temporals.format(item.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>-->
-							<!--<td width="20%">[[${item.lastLoginIp}]]</td>-->
-						<!--</tr>-->
+					<tr th:if="${#lists.isEmpty(accounts)}" class="indexData">
+						<td colspan="3" style="text-align: center;">查无数据113</td>
+					</tr>
+					<tr th:unless="${#lists.isEmpty(accounts)}" class="indexData" th:each="item : ${accounts}">
+						<td width="20%">[[${item.account}]]</td>
+						<td width="20%">[[${item.count}]]</td>
+						<td width="20%">[[${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+					</tr>
 					</tbody>
 				</table>
+				<div th:include="page :: page"></div>
 			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

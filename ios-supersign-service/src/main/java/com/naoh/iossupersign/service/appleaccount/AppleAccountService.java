@@ -1,5 +1,6 @@
 package com.naoh.iossupersign.service.appleaccount;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.storage.mysql.mapper.AppleAccountMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,5 +25,9 @@ public class AppleAccountService {
 
     public List<AppleAccountPO> getAllAccount() {
         return appleAccountMapper.getAllAppleAccount();
+    }
+
+    public Page<AppleAccountPO> selectAppleAccountByCondition(Page<AppleAccountPO> page, AppleAccountPO appleAccountPO) {
+       return appleAccountMapper.selectAppleAccountByCondition(page , appleAccountPO);
     }
 }

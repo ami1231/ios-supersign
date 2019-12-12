@@ -1,12 +1,19 @@
 package com.naoh.iossupersign.controller;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.annotations.ApiOperation;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.util.List;
 
 /**
  * @author Peter.Hong
@@ -16,15 +23,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("appleAccount")
 public class AppleAccountController {
 
-    @Autowired
-    private AppleAccountBSService appleAccountBSService;
+    private static final Integer DEFAULT_PAGE = 1;
+
+    private final AppleAccountBSService appleAccountBSService;
+
+    public AppleAccountController(AppleAccountBSService appleAccountBSService) {
+        this.appleAccountBSService = appleAccountBSService;
+    }
 
     @RequestMapping("/index")
-    public String index(){
-
-        appleAccountBSService.getAllAccount();
-
-        return "supersignature/appleaccount/index";
+    public String index(Model model){
+        return search(DEFAULT_PAGE,null, model);
     }
 
     @PostMapping("addAccount")
@@ -37,10 +46,15 @@ public class AppleAccountController {
         return null;
     }
 
-    @GetMapping("queryByAccount")
-    public String queryAccount(AppleAccountPO appleAccountPO){
-        appleAccountBSService.getAccountByAccount(appleAccountPO);
-        return null;
+    @GetMapping("/search")
+    @ApiOperation(value = "搜尋")
+    public String search(@RequestParam(value = "page") Integer currentPage,
+                         AppleAccountPO appleAccountPO ,
+                                Model model) {
+        Page<AppleAccountPO>  appleAccountPOS = appleAccountBSService.selectAppleAccountByCondition(currentPage,appleAccountPO);
+        model.addAttribute("page", appleAccountPOS);
+        model.addAttribute("accounts", appleAccountPOS.getRecords());
+        return "supersignature/appleaccount/index";
     }
 
 }

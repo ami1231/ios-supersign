@@ -1,9 +1,10 @@
 package com.naoh.iossupersign.storage.mysql.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
-import com.naoh.iossupersign.model.po.MemberPO;
-import org.apache.ibatis.annotations.*;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +23,5 @@ public interface AppleAccountMapper extends BaseMapper<AppleAccountPO> {
 
     AppleAccountPO getAppleAccountByAccount(String account);
 
+    Page<AppleAccountPO> selectAppleAccountByCondition(Page<AppleAccountPO> page, @Param("appleAccountPO") AppleAccountPO appleAccountPO);
 }

@@ -15,13 +15,13 @@ import java.time.LocalDateTime;
 public class AppleAccountPO {
 
   @ApiModelProperty(value = "id")
-  private long id;
+  private Long id;
 
   @ApiModelProperty(value = "账号")
   private String account;
 
   @ApiModelProperty(value = "可用数量")
-  private long count;
+  private Integer count;
 
   @ApiModelProperty(value = "p8内容")
   private String p8;
