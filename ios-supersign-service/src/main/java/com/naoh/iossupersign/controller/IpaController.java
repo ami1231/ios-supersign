@@ -1,6 +1,8 @@
 package com.naoh.iossupersign.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.naoh.iossupersign.base.ApiResult;
+import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import io.swagger.annotations.Api;
@@ -40,8 +42,17 @@ public class IpaController {
     @ApiOperation(value = "/uploadPackage", notes = "上传ipa", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseBody
     @PostMapping(value = "/uploadPackage")
-    public void uploadPackage(@RequestPart("file")MultipartFile file, String summary) {
-        ipaPackageBSService.uploadIpa(file, summary);
+    public ApiResult<String> uploadPackage(@RequestPart(value = "ipaFile")MultipartFile file, @RequestParam("summary")String summary) {
+        ApiResult<String> result = new ApiResult<>();
+        try {
+            ipaPackageBSService.uploadIpa(file, summary);
+            result.setCode(ApiResult.SUCCESS_CODE);
+            result.setMsg(ApiResult.SUCCESS_MSG);
+
+        }catch (ServiceException e){
+            result.setMsg(e.getErrorMsg());
+        }
+        return result;
     }
 
     @GetMapping("/search")

@@ -6,19 +6,19 @@ import cn.hutool.core.util.ZipUtil;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.naoh.iossupersign.enums.ServiceError;
+import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.service.spi.ServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
-import java.util.Objects;
 
 /**
  * @author Peter.Hong
@@ -56,10 +56,13 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
                 // 解析失敗
                 // throws exception
                 log.error("error" ,e);
+                throw new ServiceException(ServiceError.INSERT_DATA_FAILURE);
             }
         }else {
             // 上传的文件非ipa文件
             // throws exception
+            log.error("file is not ipa");
+            throw new ServiceException(ServiceError.INVALID_PARAMETER);
         }
     }
 
