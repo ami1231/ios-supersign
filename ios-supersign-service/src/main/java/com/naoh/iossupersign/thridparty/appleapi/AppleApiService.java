@@ -143,21 +143,14 @@ public class AppleApiService extends AppleApi{
         return response.getBody().getData();
     }
 
-    public void removeCertificates(AuthorizeBO authorizeBO){
+    public List<AppleResultDTO> selectCertificates(AuthorizeBO authorizeBO){
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
-        HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(headers);
+        AppleReqBody qeryParam = AppleReqBody.init().add("fields[certificates]","IOS_DEVELOPMENT");
+        HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(qeryParam,headers);
         String url = AppleApiEnum.LIST_CERTIFICATES_API.getApiPath();
         ResponseEntity<AppleApiResult<List<AppleResultDTO>>> response = restTemplate.exchange(url,AppleApiEnum.LIST_CERTIFICATES_API.getHttpMethod(),httpEntity,
                 new ParameterizedTypeReference<AppleApiResult<List<AppleResultDTO>>>(){});
-
-        if(response.getBody().getData()!=null){
-            for(AppleResultDTO appleResultDTO:response.getBody().getData()){
-                httpEntity = new HttpEntity<>(headers);
-                url = AppleApiEnum.DELETE_CERTIFICATES_API.getApiPath().replace("{id}",appleResultDTO.getId());
-                restTemplate.exchange(url,AppleApiEnum.DELETE_CERTIFICATES_API.getHttpMethod(),httpEntity,
-                        Void.class);
-            }
-        }
+        return response.getBody().getData();
     }
 
     public void removeBundleIds(AuthorizeBO authorizeBO){

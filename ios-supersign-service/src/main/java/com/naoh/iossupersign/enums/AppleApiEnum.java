@@ -26,7 +26,8 @@ public enum AppleApiEnum {
      */
     NEW_CERTIFICATES_API("https://api.appstoreconnect.apple.com/v1/certificates", HttpMethod.POST),
     LIST_CERTIFICATES_API("https://api.appstoreconnect.apple.com/v1/certificates", HttpMethod.GET),
-    DELETE_CERTIFICATES_API("https://api.appstoreconnect.apple.com/v1/certificates/{id}",HttpMethod.DELETE),
+    //已经被苹果禁止使用
+    //DELETE_CERTIFICATES_API("https://api.appstoreconnect.apple.com/v1/certificates/{id}",HttpMethod.DELETE),
     ;
 
 

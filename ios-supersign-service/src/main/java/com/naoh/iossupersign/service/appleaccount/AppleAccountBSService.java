@@ -45,9 +45,14 @@ public class AppleAccountBSService {
         List<AppleResultDTO> appleDeviceDataList = appleApiService.getNumberOfAvailableDevices(authorizeBO);
         //創建apple bundleId
         AppleResultDTO bundleIdData = appleApiService.registerNewBundleId(authorizeBO);
-        //TODO 創建新證書
-        appleApiService.insertCertificates(authorizeBO);
-        AppleResultDTO cerData = new AppleResultDTO();
+        List<AppleResultDTO> certificates = appleApiService.selectCertificates(authorizeBO);
+        AppleResultDTO cerData = null;
+        if(CollectionUtils.isEmpty(certificates)){
+            //創建新證書
+            cerData = appleApiService.insertCertificates(authorizeBO);
+        }else{
+            cerData = certificates.stream().findFirst().get();
+        }
 
         if(!CollectionUtils.isEmpty(appleDeviceDataList)){
             appleAccountPO.setCount(appleDeviceDataList.size());
