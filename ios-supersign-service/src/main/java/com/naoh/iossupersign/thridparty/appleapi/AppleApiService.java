@@ -85,7 +85,7 @@ public class AppleApiService extends AppleApi{
      * @param devId
      * @return
      */
-    public File getMobileprovision(AuthorizeBO authorizeBO, String bundleId, String cerId, String devId){
+    public AppleResultDTO getMobileprovision(AuthorizeBO authorizeBO, String bundleId, String cerId, String devId){
 
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
 
@@ -102,7 +102,7 @@ public class AppleApiService extends AppleApi{
                 new ParameterizedTypeReference<AppleApiResult<AppleResultDTO>>(){});
         System.out.println(response.getBody().getData());
         File file = null;
-        return file;
+        return response.getBody().getData();
     }
 
     private AppleReqBody getProfileRelationships(String bundleId,String cerId, String devId){
