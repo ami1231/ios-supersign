@@ -4,6 +4,7 @@ import com.naoh.iossupersign.model.bo.AuthorizeBO;
 import com.naoh.iossupersign.model.dto.AppleResultDTO;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
 import org.junit.Test;
+import org.springframework.http.HttpHeaders;
 
 import java.util.List;
 
@@ -92,5 +93,18 @@ public class AppleApiServiceTest {
                 "XSd74Zbm5SWE5ITdBByJ2Ib4r/yADgr2KvSTqcbR27b4tRH0SBMy4vwOmdypZbB2\n" +
                 "eYJZaJfb").kid("5Y6JL3TGX8").build();
         appleApiService.selectCertificates(authorizeBO);
+    }
+
+    @Test
+    public void getToken(){
+        AuthorizeBO authorizeBO = AuthorizeBO.builder().iss("c36c96df-84bb-4a84-9eb7-dc4e7dbe3f76")
+                .p8("MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgncr4nK751LxBgcds\n" +
+                        "vz/wEJVphJwraKIP5ZC7vfdear2gCgYIKoZIzj0DAQehRANCAASE0vBhg7hKWA0l\n" +
+                        "5cQQNFyGAlD+Xh5dHESYyD4EZUi2emIs7SM4DR9Al0XFkdNPlhRjHxD2zTxFsbsZ\n" +
+                        "nuZD7vrp")
+                .kid("NMHY2UHT97")
+                .build();
+        HttpHeaders headers = appleApiService.getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
+        System.out.println(headers);
     }
 }

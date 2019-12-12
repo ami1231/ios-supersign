@@ -11,7 +11,7 @@ import java.security.InvalidKeyException;
 
 public abstract class AppleApi {
 
-    protected HttpHeaders getToken(String p8, String iss, String kid) {
+    public HttpHeaders getToken(String p8, String iss, String kid) {
         String s = p8.
                 replace("-----BEGIN PRIVATE KEY-----", "").
                 replace("-----END PRIVATE KEY-----", "");

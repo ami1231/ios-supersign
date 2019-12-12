@@ -12,7 +12,9 @@
         <include refid="Base_Column_List"/>
         FROM ipa_package
         <where>
-            <if test="name != null and name != ''"></if>
+            <if test="name != null and name != ''">
+                name = #{name}
+            </if>
         </where>
     </select>
 
