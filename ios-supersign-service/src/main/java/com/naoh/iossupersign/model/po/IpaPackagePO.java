@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 /**
  * @author Peter.Hong
@@ -42,13 +43,14 @@ public class IpaPackagePO implements Serializable {
     @ApiModelProperty(value = "简介")
     private String summary;
 
-    @ApiModelProperty(value = "获取UDID证书地址")
-    private String mobileconfig;
-
     @ApiModelProperty(value = "下载地址")
     private String link;
 
     @ApiModelProperty(value = "总下载量")
     private long count;
+
+    private LocalDateTime createTime;
+
+    private LocalDateTime updateTime;
 
 }

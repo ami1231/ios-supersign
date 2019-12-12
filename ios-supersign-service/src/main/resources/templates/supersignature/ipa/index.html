@@ -40,17 +40,20 @@
 								<span>删除</span>
 							</td>
 						</tr>
-						<!--<tr th:if="${#lists.isEmpty(accList)}" class="indexData">-->
-							<!--<td colspan="3" style="text-align: center;">查无数据</td>-->
-						<!--</tr>-->
-						<!--<tr th:unless="${#lists.isEmpty(accList)}" class="indexData" th:each="item : ${accList}" th:id="'dataTr' + ${item.id}">-->
-							<!--<td width="20%">[[${item.member}]]</td>-->
-							<!--<td width="20%">[[${item.name}]]</td>-->
-							<!--<td width="20%">[[${#temporals.format(item.lastLoginTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>-->
-							<!--<td width="20%">[[${item.lastLoginIp}]]</td>-->
-						<!--</tr>-->
+						<tr th:if="${#lists.isEmpty(page.getRecords())}" class="indexData">
+							<td colspan="3" style="text-align: center;">查无数据</td>
+						</tr>
+						<tr th:unless="${#lists.isEmpty(page.getRecords())}" class="indexData" th:each="item : ${page.getRecords()}" th:id="'dataTr' + ${item.id}">
+							<td width="20%">[[${item.id}]]</td>
+							<td width="20%">[[${item.name}]]</td>
+							<td width="20%">[[${item.bundleIdentifier}]]</td>
+							<td width="20%">[[${item.buildVersion}]]</td>
+							<td width="20%">[[${#temporals.format(item.updateTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+							<td width="20%">[[${item.count}]]</td>
+						</tr>
 					</tbody>
 				</table>
+				<div th:include="page :: page"></div>
 			</div>
 			<!-- Modal -->
 			<!--<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">-->
@@ -127,6 +130,10 @@
 					}
 				});
 			}
+
+            function pagination(page) {
+                $("#page").val(page);
+            }
 		</script>
 	</div>
 </html>

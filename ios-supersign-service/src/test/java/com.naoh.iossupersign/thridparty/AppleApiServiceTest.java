@@ -48,7 +48,7 @@ public class AppleApiServiceTest {
                         "5cQQNFyGAlD+Xh5dHESYyD4EZUi2emIs7SM4DR9Al0XFkdNPlhRjHxD2zTxFsbsZ\n" +
                         "nuZD7vrp")
                 .kid("NMHY2UHT97").build();
-        appleApiService.getMobileprovision(authorizeBO, "C4PXFAQDJJ", "7NZ2JK6P33", "G9AF68YNV6");
+        appleApiService.getMobileprovision(authorizeBO, "C4PXFAQDJJ", "XCG3R8D7L3", "G9AF68YNV6");
     }
 
     @Test

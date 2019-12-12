@@ -18,8 +18,8 @@ public class IpaPackageServiceImpl implements IpaPackageService {
     private IpaPackageMapper ipaPackageMapper;
 
     @Override
-    public void insertIpaPackage(IpaPackagePO ipaPackagePO) {
-        ipaPackageMapper.insert(ipaPackagePO);
+    public int insertIpaPackage(IpaPackagePO ipaPackagePO) {
+        return ipaPackageMapper.insert(ipaPackagePO);
     }
 
     @Override
@@ -28,7 +28,7 @@ public class IpaPackageServiceImpl implements IpaPackageService {
     }
 
     @Override
-    public Page<IpaPackagePO> getIpaPackagePage(Page<IpaPackagePO> page) {
-        return ipaPackageMapper.selectPage(page);
+    public Page<IpaPackagePO> getIpaPackagePage(Page<IpaPackagePO> page, String name) {
+        return ipaPackageMapper.selectPage(page, name);
     }
 }

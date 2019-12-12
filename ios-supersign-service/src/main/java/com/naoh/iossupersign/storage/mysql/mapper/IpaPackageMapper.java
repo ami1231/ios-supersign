@@ -13,10 +13,11 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface IpaPackageMapper extends BaseMapper<IpaPackagePO> {
+public interface IpaPackageMapper extends BaseMapper<IpaPackagePO>  {
 
-    Page<IpaPackagePO> selectPage(Page<IpaPackagePO> pageParam);
+    Page<IpaPackagePO> selectPage(Page<IpaPackagePO> pageParam, @Param("name")String name);
 
     IpaPackagePO selectByName(@Param("name")String name);
 
+    int insert(IpaPackagePO ipaPackagePO);
 }
