@@ -25,15 +25,8 @@ public class AuthenticationService implements UserDetailsService {
     public UserDetails loadUserByUsername(String account) throws UsernameNotFoundException {
         MemberPO member = memberBSService.getMemberByAccount(account).orElseThrow(() -> new UsernameNotFoundException("找不到資料"));
 
-//        //  檢查狀態
-//        if (LoginStatus.LOCK.name().equals(member.getStatus())) {
-//            return MemberUserDetails.getLockUser();
-//        } else if (LoginStatus.SUSPEND.name().equals(member.getStatus())) {
-//            return MemberUserDetails.getDisableUser();
-//        }
-
         return new MemberUserDetails(member.getAccount(),
-                member.getPasswd(), new ArrayList<>());
+                member.getPassword(), new ArrayList<>());
     }
 
 }

@@ -5,7 +5,6 @@ import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 /**
@@ -19,13 +18,4 @@ public class MemberUserDetails extends User {
         super(username, password, authorities);
     }
 
-    public static User getLockUser() {
-        return new User("N/A", "N/A", true, true, true, false,
-                new ArrayList<>());
-    }
-
-    public static User getDisableUser() {
-        return new User("N/A", "N/A", false, true, true, true,
-                new ArrayList<>());
-    }
 }

@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Peter.Hong
  * @date 2019/12/10
@@ -16,4 +18,7 @@ public interface MemberMapper extends BaseMapper<MemberPO> {
 
     MemberPO getByAccount(@Param("account") String account);
 
+    List<MemberPO> selectMemberByCondition(@Param("memberPO") MemberPO memberPO);
+
+    void update(MemberPO memberPO);
 }

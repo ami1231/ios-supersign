@@ -1,10 +1,8 @@
 package com.naoh.iossupersign.base;
 
-import com.naoh.iossupersign.enums.ServiceError;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import sun.security.krb5.internal.PAForUserEnc;
 
 /**
  * 
@@ -23,12 +21,4 @@ public class ApiResult<T>{
 	private T data;
 	private String code = FAILD_CODE;
 	private String msg;
-
-	public ApiResult(ServiceError serviceError){
-		this.msg = serviceError.msg;
-	}
-
-	public ApiResult(String msg){
-		this.msg = msg;
-	}
 }

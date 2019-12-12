@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" layout:decorator="layout">
-  <head layout:fragment="contentHead">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorator="layout">
+<head>
+  <th:block layout:fragment="contentHead">
     <title>首页</title>
-  </head>
-  <body>
-    <div layout:fragment="content">
-    <h1>Welcome!</h1>
-	</div>
-  </body>
-  
-  
-  <script type="text/javascript">
+  </th:block>
+
+
+  <th:block layout:fragment="contentCss">
+  </th:block>
+</head>
+
+<body>
+<div layout:fragment="content">
+  <h1>Welcome!</h1>
+</div>
+
+<th:block layout:fragment="contentJs">
+  <script type="text/javascript" th:inline="javascript">
   </script>
+</th:block>
+</body>
 </html>

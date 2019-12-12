@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" layout:decorator="layout">
+	<head layout:fragment="contentHead">
+		<title>帐号管理</title>
+	</head>
+	<body>
+		<div layout:fragment="contentCss">
+			<link th:href="@{/css/jquery-ui.css}" rel="stylesheet"/>
+			<link th:href="@{/css/jquery.toast.css}" rel="stylesheet"/>
+		</div>
+		<div layout:fragment="content">
+			<div class="row">
+				<div  class="btn btn-primary mt-10" onclick="addAccount();">新增</div>
+			</div>
+			<div class="row">
+				<table class="table table-bordered mt-15">
+					<thead>
+						<tr>
+							<th>帐号</th>
+							<th>最后登录时间</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="sortable">
+						<tr th:if="${#lists.isEmpty(members)}" class="indexData">
+							<td colspan="3" style="text-align: center;">查无数据</td>
+						</tr>
+						<tr th:unless="${#lists.isEmpty(members)}" class="indexData" th:each="item,iter : ${members}" th:id="'dataTr' + ${item.id}">
+							<td width="20%">[[${item.account}]]</td>
+							<td width="20%">[[${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+							<td width="20%">
+								<a href="javascript:void(0);" th:data-id="${iter.index}" class="btn btn-primary btn-xs btn-t edit-hide" onclick="editPSW(this);" >修改密码</a>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<!-- Modal -->
+			<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="modalTitle">新增帐号</h4>
+                        </div>
+                        <div class="modal-body">
+                        	<form id="addAccForm">
+                        		<div class="row ml-10 mt-5" id="accountColumn" name="accountColumn">
+                        			<div class="col-md-2 custom-label" >
+                        				账号: 
+                        			</div>
+									<div class="col-md-4">
+										<input type="text" name="account" id="account" class="form-control">
+									</div>
+                        		</div>
+								<div class="row ml-10 mt-5" id="passwordColumn" name="passwordColumn">
+									<div class="col-md-2 custom-label">
+										密码:
+									</div>
+									<div class="col-md-4">
+										<input type="password" name="password" id="password" class="form-control" placeholder="密码只能是英文或数字">
+									</div>
+								</div>
+                        	</form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="button" class="btn btn-primary" onclick="saveInsert()">提交</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+		</div>
+	</body>
+	<div layout:fragment="contentJs">
+		<script th:src="@{/js/jquery-ui-1.11.0.min.js}" type="text/javascript"></script>
+		<script th:src="@{/js/jquery.toast.js}" type="text/javascript"></script>
+		<script th:src="@{/js/myToast.js}" type="text/javascript"></script>
+		<script th:src="@{/js/cryptoJS/core-min.js}" type="text/javascript"></script>
+		<script th:src="@{/js/cryptoJS/md5.js}" type="text/javascript"></script>
+		<script type="text/javascript" th:inline="javascript">
+			var addModalTitle = "新增帐号";
+			var editPSWModalTitle = "修改密码";
+			var members = [[${members}]];
+			var methodName;
+			
+			function md5encode(word) {
+				return CryptoJS.MD5(word).toString();
+			}
+
+			function addAccount(){
+				methodName = 'insert';
+				$("#accountColumn").attr("style","display:block;");
+				$("#account").removeAttr("disabled");
+				$("#account").removeAttr("readonly");
+				$("#account").val("");
+				$("#nameColumn").attr("style","display:block;");
+				$("#name").val("");
+				$("#roleColumn").attr("style","display:block;");
+				$("#role").val("1");
+				$("#passwordColumn").attr("style","display:block;");
+				$("#password").val();
+				$("#modalTitle").html(addModalTitle);
+				$("#myModal").modal("show");
+			}
+
+			function saveInsert(){
+				var url ;
+				var passwordMd5encode;
+				var password = $("#password").val().trim();
+
+				if(methodName == 'insert'){
+					url = "/member/create";
+				}else if(methodName == 'editPSW'){
+					url = "/member/updateMember";
+				}
+				if(methodName === 'editPSW' || methodName === 'insert'){
+					if(!checkPSW()){
+						return;
+					};
+					passwordMd5encode = md5encode(password);
+				}else{
+					passwordMd5encode = password;
+				}
+
+				datas = {
+					account : $("#account").val(),
+					password : passwordMd5encode,
+				}
+
+				$.ajax({
+					type: "POST",
+					url: url,
+					data: datas, // serializes
+					success: function(data)
+					{
+						if("200" == data.code){
+							myToast(data.msg);
+							setTimeout(function(){
+								location.reload();
+							}, 3000)
+						}else{
+							myToastError(data.msg);
+						}
+					}
+				});
+			}
+
+			function checkPSW() {
+				var password = $("#password").val();
+				var passwordReg = /^[A-Za-z0-9]+$/;
+
+				if(password.trim().length===0 || (password.length !==password.trim().length)){
+					alert("密码不得為空或輸入空白");
+					$("#password").focus();
+					return false;
+				}
+				if(!password.match(passwordReg)){
+					alert("密码只能是英文或數字");
+					$("#password").focus();
+					return false;
+				}
+				return true;
+			}
+
+
+
+			function editPSW(btnElement) {
+				methodName = 'editPSW';
+				checkColumnShowOrNot(btnElement);
+				$("#myModal").modal("show");
+			}
+
+			function checkColumnShowOrNot(btnElement){
+
+				if(methodName == 'editPSW'){
+
+					var id = $(btnElement).attr("data-id");
+					var acc = members[id];
+					$("#accountColumn").attr("style","display:none;");
+					$("#account").val(acc.account);
+					$("#passwordColumn").attr("style","display:block;");
+					$("#password").val("");
+					$("#modalTitle").html(editPSWModalTitle);
+				}
+
+			}
+		</script>
+	</div>
+</html>

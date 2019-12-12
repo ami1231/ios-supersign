@@ -54,7 +54,7 @@
 						</tbody>
 					</table>
 				</div>
-				<div th:include="page :: page"></div>
+				<div th:if="${!#lists.isEmpty(page.getRecords())}" th:include="page :: page"></div>
 			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

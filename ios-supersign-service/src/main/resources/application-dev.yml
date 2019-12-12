@@ -26,5 +26,5 @@ server:
     max-connections: 100
     max-threads: 20
     min-spare-threads: 5
-
+debug: true
 

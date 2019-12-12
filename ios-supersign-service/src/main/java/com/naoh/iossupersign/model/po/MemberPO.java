@@ -23,7 +23,7 @@ public class MemberPO implements Serializable {
     private String account;
 
     // 密码
-    private String passwd;
+    private String password;
 
     // 创建时间
     private LocalDateTime createTime;

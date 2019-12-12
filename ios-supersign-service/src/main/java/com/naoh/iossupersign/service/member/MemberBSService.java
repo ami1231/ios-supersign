@@ -2,6 +2,7 @@ package com.naoh.iossupersign.service.member;
 
 import com.naoh.iossupersign.model.po.MemberPO;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -11,4 +12,10 @@ import java.util.Optional;
 public interface MemberBSService {
 
     Optional<MemberPO> getMemberByAccount(String account);
+
+    List<MemberPO> selectMemberByCondition(MemberPO memberPO);
+
+    void create(MemberPO memberPO);
+
+    void update(MemberPO memberPO);
 }
