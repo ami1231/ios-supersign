@@ -8,9 +8,9 @@ create table if not exists ipa_package
 	mini_version varchar(30) not null comment '最小支持版本',
 	bundle_identifier varchar(255) not null comment '安装包id',
 	link varchar(255) not null comment '下载地址',
-	mobileconfig varchar(255) null comment '获取UDID证书名称',
 	summary varchar(255) null comment '简介',
 	create_time timestamp default CURRENT_TIMESTAMP not null comment '创建时间',
+	update_time timestamp default CURRENT_TIMESTAMP not null comment '修改时间',
 	`count` int default 0 not null comment '总下载量',
 	UNIQUE KEY (bundle_identifier),
 	UNIQUE KEY (link)

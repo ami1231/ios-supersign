@@ -4,15 +4,23 @@
 
     <sql id="Base_Column_List">
     id, `name`, icon, version, build_version, mini_version, bundle_identifier,
-    link, mobileconfig, summary, create_time, `count`
+    link, summary, create_time, `count`, update_time
   </sql>
 
     <select id="selectPage" resultType="IpaPackagePO">
         SELECT
         <include refid="Base_Column_List"/>
         FROM ipa_package
+        <where>
+            <if test="name != null and name != ''"></if>
+        </where>
     </select>
 
+    <insert id="insert" parameterType = "IpaPackagePO">
+        insert into ipa_package(`name`, icon, version, build_version, mini_version, bundle_identifier,
+    link, summary)
+    values(#{name}, #{icon}, #{version}, #{buildVersion}, #{miniVersion}, #{bundleIdentifier}, #{link}, #{summary})
+    </insert>
 
 
 </mapper>
