@@ -1,6 +1,5 @@
 package com.naoh.iossupersign.service.appleaccount;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.enums.ServiceError;
 import com.naoh.iossupersign.exception.ServiceException;
@@ -40,16 +39,20 @@ public class AppleAccountBSService {
         AuthorizeBO authorizeBO = AuthorizeBO.builder()
                 .iss(appleAccountPO.getIssuerId())
                 .kid(appleAccountPO.getKid())
-                .p8(appleAccountPO.getP8()).build();
+                .p8(appleAccountPO.getP8())
+                .csr(appleAccountPO.getCsr()).build();
         //取得機器下的設備
         List<AppleResultDTO> appleDeviceDataList = appleApiService.getNumberOfAvailableDevices(authorizeBO);
         //創建apple bundleId
         AppleResultDTO bundleIdData = appleApiService.registerNewBundleId(authorizeBO);
         //TODO 創建新證書
+        appleApiService.insertCertificates(authorizeBO);
         AppleResultDTO cerData = new AppleResultDTO();
 
         if(!CollectionUtils.isEmpty(appleDeviceDataList)){
             appleAccountPO.setCount(appleDeviceDataList.size());
+        }else{
+            appleAccountPO.setCount(0);
         }
         appleAccountPO.setCerId(cerData.getId());
         appleAccountPO.setBundleIds(bundleIdData.getId());

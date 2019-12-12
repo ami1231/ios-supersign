@@ -26,17 +26,16 @@
     </select>
 
     <insert id="insert" parameterType="com.naoh.iossupersign.model.po.AppleAccountPO">
-    insert into apple_account (id, account, `count`, p8 , issuer_id , kid , p12 , cer_id , bundle_ids , create_time)
-    values (#{id,jdbcType=INTEGER},
-        #{account,jdbcType=VARCHAR},
+    insert into apple_account (account, `count`, p8 , issuer_id , kid , p12 , cer_id , bundle_ids , create_time)
+    values (#{account,jdbcType=VARCHAR},
         #{count,jdbcType=INTEGER},
         #{p8,jdbcType=VARCHAR},
-        #{issuer_id,jdbcType=VARCHAR},
+        #{issuerId,jdbcType=VARCHAR},
         #{kid,jdbcType=VARCHAR},
         #{p12,jdbcType=VARCHAR},
-        #{cer_id,jdbcType=INTEGER},
-        #{bundle_ids,jdbcType=VARCHAR},
-        #{create_time,jdbcType=TIMESTAMP})
+        #{cerId,jdbcType=INTEGER},
+        #{bundleIds,jdbcType=VARCHAR},
+        #{createTime,jdbcType=TIMESTAMP})
   </insert>
 
 

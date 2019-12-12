@@ -44,4 +44,7 @@ public class AppleAccountPO {
   @ApiModelProperty(value = "添加时间")
   private LocalDateTime createTime;
 
+  @ApiModelProperty(value = "CertificateSigningRequest")
+  private String csr;
+
 }

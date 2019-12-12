@@ -1,19 +1,15 @@
 package com.naoh.iossupersign.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.naoh.iossupersign.base.ApiResult;
+import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
 import io.swagger.annotations.ApiOperation;
-import org.springframework.security.access.prepost.PreAuthorize;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * @author Peter.Hong
@@ -21,6 +17,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("appleAccount")
+@Slf4j
 public class AppleAccountController {
 
     private static final Integer DEFAULT_PAGE = 1;
@@ -37,13 +34,23 @@ public class AppleAccountController {
     }
 
     @PostMapping("addAccount")
-    public String addAppleAccount(AppleAccountPO appleAccountPO){
-
+    @ResponseBody
+    public ApiResult<String> addAppleAccount(AppleAccountPO appleAccountPO){
+        ApiResult<String> result = new ApiResult<>();
         //確認蘋果帳號是否存在
-        if(appleAccountBSService.getAccountByAccount(appleAccountPO)==null){
-            appleAccountBSService.addAppleAccount(appleAccountPO);
+        try{
+            if(appleAccountBSService.getAccountByAccount(appleAccountPO)==null){
+                appleAccountBSService.addAppleAccount(appleAccountPO);
+                result.setCode(ApiResult.SUCCESS_CODE);
+                result.setMsg(ApiResult.SUCCESS_MSG);
+                log.info("add Apple Account Success");
+            }else{
+                result.setMsg("账号已存在");
+            }
+        }catch (ServiceException se){
+            result.setMsg(se.getErrorMsg());
         }
-        return null;
+        return result;
     }
 
     @GetMapping("/search")

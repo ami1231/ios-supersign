@@ -16,4 +16,7 @@ public class ServiceException extends RuntimeException {
         this.serviceError = serviceError;
     }
 
+    public String getErrorMsg(){
+        return serviceError.msg;
+    }
 }

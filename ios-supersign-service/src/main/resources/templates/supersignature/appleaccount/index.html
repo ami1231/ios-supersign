@@ -16,16 +16,14 @@
 				<table class="table table-bordered mt-15">
 					<thead>
 						<tr>
-							<th>ID</th>
 							<th>苹果账号</th>
 							<th>已用</th>
 							<th>添加时间</th>
-							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody id="sortable">
 					<tr th:if="${#lists.isEmpty(accounts)}" class="indexData">
-						<td colspan="3" style="text-align: center;">查无数据113</td>
+						<td colspan="4" style="text-align: center;">查无数据</td>
 					</tr>
 					<tr th:unless="${#lists.isEmpty(accounts)}" class="indexData" th:each="item : ${accounts}">
 						<td width="20%">[[${item.account}]]</td>
@@ -42,34 +40,50 @@
 					<div class="modal-content">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">新增帐号</h4>
+                            <h4 class="modal-title">新增苹果帐号</h4>
                         </div>
                         <div class="modal-body">
                         	<form id="addAccForm">
-                        		<div class="row ml-10 mt-5">
-                        			<div class="col-md-2 custom-label" >
-                        				账号: 
+								<div class="row ml-12 mt-5">
+									<div class="col-md-3 custom-label" >
+										<span style="color: red; ">*  </span>苹果账号:
+									</div>
+									<div class="col-md-9">
+										<input type="email" name="account" class="form-control" >
+									</div>
+								</div>
+                        		<div class="row ml-12 mt-5">
+                        			<div class="col-md-3 custom-label" >
+										<span style="color: red; ">*  </span>P8内容:
                         			</div>
-									<div class="col-md-4">
-										<input type="text" name="account" class="form-control">
+									<div class="col-md-9">
+										<textarea  name="p8" class="form-control" ></textarea>
 									</div>
                         		</div>
-                        		<div class="row ml-10 mt-5">
-                        			<div class="col-md-2 custom-label"  >
-                        				姓名: 
+                        		<div class="row ml-12 mt-5">
+                        			<div class="col-md-3 custom-label"  >
+										<span style="color: red; ">*  </span>IssuerId:
                         			</div>
-									<div class="col-md-4">
-										<input type="text" name="name" class="form-control">
+									<div class="col-md-9">
+										<input type="text" name="issuerId" class="form-control">
 									</div>
                         		</div>
-                        		<div class="row ml-10 mt-5">
-                        			<div class="col-md-2 custom-label">
-                        				密碼: 
+                        		<div class="row ml-12 mt-5">
+                        			<div class="col-md-3 custom-label">
+										<span style="color: red; ">*  </span>kid:
                         			</div>
-									<div class="col-md-4">
-										<input type="text" name="password" class="form-control">
+									<div class="col-md-9">
+										<input type="text" name="kid" class="form-control">
 									</div>
                         		</div>
+								<div class="row ml-12 mt-5">
+									<div class="col-md-3 custom-label">
+										<span style="color: red; ">*  </span>csr:
+									</div>
+									<div class="col-md-9">
+										<textarea  name="csr" class="form-control" ></textarea>
+									</div>
+								</div>
                         	</form>
                         </div>
                         <div class="modal-footer">
@@ -95,10 +109,9 @@
 			
 			function createAcc(){
 				var datas = $("#addAccForm").serialize();
-				
 				$.ajax({
 					type: "POST",
-					url: "/account/create",
+					url: "/appleAccount/addAccount",
 					data: datas, // serializes 
 					success: function(data)
 					{
@@ -108,9 +121,22 @@
 						}else{
 							myToastError(data.msg);
 						}
+					},
+					error:function (data) {
+						myToastError(data.msg);
 					}
 				});
 			}
+
+			function pagination(page) {
+				$("#page").val(page);
+			}
+
+			function pagination(page){
+				$("#pageNo").val(page);
+				$("#search").submit();
+			}
+
 		</script>
 	</div>
 </html>
