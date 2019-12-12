@@ -5,7 +5,6 @@ import com.naoh.iossupersign.model.bo.AuthorizeBO;
 import com.naoh.iossupersign.model.dto.AppleApiResult;
 import com.naoh.iossupersign.model.dto.AppleReqBody;
 import com.naoh.iossupersign.model.dto.AppleResultDTO;
-import com.naoh.iossupersign.model.po.AppleAccountPO;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -40,26 +39,6 @@ public class AppleApiService extends AppleApi{
         return responseBody.getData();
     }
 
-    public String addDeviceUdidToAppleAccount(String udid , AuthorizeBO authorizeBO){
-        Map<String,String> body = new HashMap<>();
-        body.put("type", "devices");
-        Map attributes = new HashMap();
-        attributes.put("name", udid);
-        attributes.put("udid", udid);
-        attributes.put("platform", "IOS");
-//        body.put("attributes", attributes);
-        Map data = new HashMap();
-        data.put("data", body);
-        String url = AppleApiEnum.REGISTER_NEW_DEVICE_API.getApiPath();
-//        String result = HttpRequest.post(url).
-//                addHeaders(getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid())).
-//                body(JSON.toJSONString(data)).execute().body();
-//        Map map = JSON.parseObject(result, Map.class);
-//        Map data1 = (Map) map.get("data");
-//        String id = (String)data1.get("id");
-        return "";
-    }
-
     /**
      * 註冊新設備到蘋果帳號
      * @param udid
@@ -79,6 +58,11 @@ public class AppleApiService extends AppleApi{
         return response.getBody().getData();
     }
 
+    /**
+     * 註冊新BundleId
+     * @param authorizeBO
+     * @return
+     */
     public AppleResultDTO registerNewBundleId(AuthorizeBO authorizeBO){
 
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
@@ -95,7 +79,14 @@ public class AppleApiService extends AppleApi{
         return response.getBody().getData();
     }
 
-
+    /**
+     * 產生profile檔
+     * @param authorizeBO
+     * @param bundleId
+     * @param cerId
+     * @param devId
+     * @return
+     */
     public File getMobileprovision(AuthorizeBO authorizeBO, String bundleId, String cerId, String devId){
 
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
@@ -137,6 +128,11 @@ public class AppleApiService extends AppleApi{
         return relationships;
     }
 
+    /**
+     * 建立CER憑證檔
+     * @param authorizeBO
+     * @return
+     */
     public AppleResultDTO insertCertificates(AuthorizeBO authorizeBO){
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
 
