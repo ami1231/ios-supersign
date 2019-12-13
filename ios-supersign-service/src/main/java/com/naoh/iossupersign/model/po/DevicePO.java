@@ -4,6 +4,8 @@ import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
+import java.time.LocalDate;
+
 @ApiModel(value = "设备对象")
 @Data
 @AllArgsConstructor
@@ -24,4 +26,5 @@ public class DevicePO {
   @ApiModelProperty(value = "设备在开发者后台id")
   private String deviceId;
 
+  private LocalDate createTime;
 }

@@ -18,6 +18,9 @@ server:
     enabled: true
     mime-types: application/json
     min-response-size: 2KB
+  servlet:
+    session:
+      timeout: 30m
 
 spring:
   profiles:

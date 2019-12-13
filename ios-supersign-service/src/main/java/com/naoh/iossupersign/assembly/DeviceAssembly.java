@@ -5,6 +5,7 @@ import com.naoh.iossupersign.model.po.DevicePO;
 import lombok.NonNull;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -16,7 +17,8 @@ public class DeviceAssembly {
         List<DevicePO> devicePOS = new ArrayList<>();
         deviceDTOS.forEach(deviceDTO -> {
             Map<String,Object> attributes = deviceDTO.getAttributes();
-            DevicePO devicePO = DevicePO.builder().appleId(appleId).deviceId(deviceDTO.getId()).udid(attributes.get("udid").toString()).build();
+            DevicePO devicePO = DevicePO.builder().appleId(appleId).deviceId(deviceDTO.getId()).udid(attributes.get("udid").toString())
+                    .createTime(LocalDate.now()).build();
             devicePOS.add(devicePO);
         });
         return devicePOS;

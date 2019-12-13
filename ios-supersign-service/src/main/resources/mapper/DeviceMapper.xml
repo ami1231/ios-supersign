@@ -3,25 +3,25 @@
 <mapper namespace="com.naoh.iossupersign.storage.mysql.mapper.DeviceMapper">
 
     <sql id="Base_Column_List">
-        id,udid,apple_id,device_id,creat_time
+        id,udid,apple_id,device_id,create_time
     </sql>
 
     <insert id="insert" parameterType="com.naoh.iossupersign.model.po.DevicePO">
-    insert into device (udid,apple_id,device_id,creat_time)
+    insert into device (udid,apple_id,device_id,create_time)
         values (
             #{udid,jdbcType=VARCHAR},
             #{appleId,jdbcType=INTEGER},
             #{deviceId,jdbcType=VARCHAR},
-            #{creatTime,jdbcType=TIMESTAMP})
+            #{createTime,jdbcType=TIMESTAMP})
   </insert>
 
     <insert id="insertList" parameterType="java.util.List">
-        insert into device (udid,apple_id,device_id,creat_time)
+        insert into device (udid,apple_id,device_id,create_time)
         values
         <foreach collection="devicePOS" item="record" index="index"
                  separator=",">
             (#{record.udid,jdbcType=VARCHAR}, #{record.appleId,jdbcType=INTEGER},
-            #{record.deviceId,jdbcType=VARCHAR}, #{record.creatTime,jdbcType=TIMESTAMP})
+            #{record.deviceId,jdbcType=VARCHAR}, #{record.createTime,jdbcType=TIMESTAMP})
         </foreach>
     </insert>
 

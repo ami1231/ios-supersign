@@ -17,7 +17,7 @@
 					<thead>
 						<tr>
 							<th>苹果账号</th>
-							<th>已用</th>
+							<th>已用设备</th>
 							<th>添加时间</th>
 						</tr>
 					</thead>
@@ -27,7 +27,7 @@
 					</tr>
 					<tr th:unless="${#lists.isEmpty(accounts)}" class="indexData" th:each="item : ${accounts}">
 						<td width="20%">[[${item.account}]]</td>
-						<td width="20%">[[${item.count}]]</td>
+						<td width="20%">[[${item.count}]]/100</td>
 						<td width="20%">[[${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 					</tr>
 					</tbody>

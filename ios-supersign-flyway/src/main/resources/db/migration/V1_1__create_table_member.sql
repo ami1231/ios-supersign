@@ -2,7 +2,7 @@ DROP TABLE IF EXISTS `member`;
 
 create table if not exists `member`
 (
-  id                bigint unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
+  id                int unsigned PRIMARY KEY NOT NULL AUTO_INCREMENT,
   account             varchar(64) BINARY          NOT NULL COMMENT '后台账号',
   password              varchar(256)                NOT NULL COMMENT '后台密码',
   create_time         datetime                    DEFAULT CURRENT_TIMESTAMP COMMENT '建立时间',

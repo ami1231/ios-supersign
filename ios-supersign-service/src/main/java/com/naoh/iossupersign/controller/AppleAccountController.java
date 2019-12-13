@@ -2,6 +2,7 @@ package com.naoh.iossupersign.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.base.ApiResult;
+import com.naoh.iossupersign.enums.ServiceError;
 import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
@@ -49,6 +50,9 @@ public class AppleAccountController {
             }
         }catch (ServiceException se){
             result.setMsg(se.getErrorMsg());
+        }catch (Exception e){
+            log.error("",e);
+            result.setMsg(ServiceError.SERVER_ERROR.msg);
         }
         return result;
     }
