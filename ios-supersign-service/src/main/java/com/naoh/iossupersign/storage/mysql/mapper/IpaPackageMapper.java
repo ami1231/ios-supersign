@@ -18,7 +18,7 @@ public interface IpaPackageMapper {
 
     IpaPackagePO selectByDownloadId(@Param("ipaDownloadId")String ipaDownloadId);
 
-    int updateById(IpaPackagePO ipaPackagePO);
+    int update(IpaPackagePO ipaPackagePO);
 
     int insert(IpaPackagePO ipaPackagePO);
 

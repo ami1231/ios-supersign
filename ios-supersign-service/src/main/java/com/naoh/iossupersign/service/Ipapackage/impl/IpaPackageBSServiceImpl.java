@@ -25,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
+import java.util.Objects;
 
 /**
  * @author Peter.Hong
@@ -61,13 +62,26 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
             try {
                 newIpaPackagePO = analyze(ipaPackageBO);
                 log.info("ipa detail : {}", newIpaPackagePO);
+
                 if(ipaPackageBO.getId() != null){
+
                     IpaPackagePO ipaPackage = ipaPackageService.selectIpaPackageById(ipaPackageBO.getId());
                     fileService.deleteFileIfExit(ipaPackage.getLink());
                     ipaPackageService.updateIpaPackage(newIpaPackagePO);
+
                 }else{
-                    ipaPackageService.insertIpaPackage(newIpaPackagePO);
+
+                    IpaPackagePO originIpaPO = ipaPackageService.selectByDownloadId(newIpaPackagePO.getIpaDownloadId());
+                    if(Objects.nonNull(originIpaPO)){
+                        // 相同 BundleId update
+                        ipaPackageService.updateIpaPackage(newIpaPackagePO);
+                    }else{
+                        ipaPackageService.insertIpaPackage(newIpaPackagePO);
+                    }
+
+
                 }
+
             } catch (Exception e) {
                 // 解析失敗
                 // throws exception

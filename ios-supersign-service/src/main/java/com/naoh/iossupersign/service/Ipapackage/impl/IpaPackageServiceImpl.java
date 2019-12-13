@@ -24,7 +24,7 @@ public class IpaPackageServiceImpl implements IpaPackageService {
 
     @Override
     public void updateIpaPackage(IpaPackagePO ipaPackagePO) {
-        ipaPackageMapper.updateById(ipaPackagePO);
+        ipaPackageMapper.update(ipaPackagePO);
     }
 
     @Override
