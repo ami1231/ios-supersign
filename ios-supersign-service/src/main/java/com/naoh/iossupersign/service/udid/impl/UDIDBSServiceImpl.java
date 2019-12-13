@@ -72,8 +72,8 @@ public class UDIDBSServiceImpl implements UDIDBSService {
         if(devicePO==null){
             List<AppleAccountPO> appleAccountPOS =  appleAccountBSService.selectBestAppleAccount();
             for(AppleAccountPO appleAccountPO:appleAccountPOS){
-                Long deviceCount = redisCache.hincr(RedisKey.APPLE_ACCOUNT_DEVICE_COUNT_KEY,appleAccountPO.getAccount(),1L);
-                if(deviceCount>100){
+                Long deviceCount = appleAccountBSService.addAppleDeviceCountToRedis(appleAccountPO.getAccount(),1L);
+                if(deviceCount>deviceLimit){
                     continue;
                 }
                 AuthorizeBO authorizeBO = new AuthorizeBO(appleAccountPO);
@@ -84,7 +84,8 @@ public class UDIDBSServiceImpl implements UDIDBSService {
                         .appleId(appleAccountPO.getId())
                         .build();
                 deviceBSService.insert(devicePO);
-                appleAccountBSService.updateAccountDeviceCount(appleAccountPO.getAccount(),deviceCount.intValue());
+                //apple_account增加一台设备资料
+                appleAccountBSService.updateAccountDeviceCount(appleAccountPO.getAccount(),1);
                 isBindSuccess = true;
                 break;
             }

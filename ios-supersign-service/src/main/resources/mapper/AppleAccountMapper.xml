@@ -54,12 +54,8 @@
         ]]>
     </select>
 
-    <select id="updateDeviceCountLok">
-        SELECT 1 FROM apple_account WHERE account = #{account} FOR UPDATE;
-    </select>
-
     <update id="updateAccountDeviceCount">
-        update apple_account set  `count` = #{deviceCount} where account = #{account}
+        update apple_account set  `count` = `count`+#{deviceCount} where account = #{account}
     </update>
 
 </mapper>

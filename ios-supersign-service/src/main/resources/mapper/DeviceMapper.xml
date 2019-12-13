@@ -28,7 +28,7 @@
     <select id="getDeviceByUdid" resultType="DevicePO">
       select <include refid="Base_Column_List"/>
         from device
-        where udid = #{udid,jdbcType=VARCHAR},
+        where udid = #{udid,jdbcType=VARCHAR}
     </select>
 
 </mapper>
