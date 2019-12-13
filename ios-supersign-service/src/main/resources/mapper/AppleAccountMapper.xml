@@ -25,7 +25,7 @@
         WHERE account = #{account}
     </select>
 
-    <insert id="insert" parameterType="com.naoh.iossupersign.model.po.AppleAccountPO">
+    <insert id="insert" parameterType="com.naoh.iossupersign.model.po.AppleAccountPO" useGeneratedKeys="true" keyProperty="id">
     insert into apple_account (account, `count`, p8 , issuer_id , kid , p12 , cer_id , bundle_ids , create_time)
     values (#{account,jdbcType=VARCHAR},
         #{count,jdbcType=INTEGER},

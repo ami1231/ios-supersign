@@ -12,6 +12,7 @@ import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
 import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import javax.validation.constraints.NotNull;
@@ -45,6 +46,7 @@ public class AppleAccountBSService {
      * 添加蘋果帳號
      * @param appleAccountPO
      */
+    @Transactional
     public void addAppleAccount(AppleAccountPO appleAccountPO) {
         AuthorizeBO authorizeBO = AuthorizeBO.builder()
                 .iss(appleAccountPO.getIssuerId())
@@ -53,6 +55,8 @@ public class AppleAccountBSService {
                 .csr(appleAccountPO.getCsr()).build();
         //取得機器下的設備
         List<AppleResultDTO> appleDeviceDataList = appleApiService.getNumberOfAvailableDevices(authorizeBO);
+        //移除目前bundleId
+        appleApiService.removeBundleIds(authorizeBO);
         //創建apple bundleId
         AppleResultDTO bundleIdData = appleApiService.registerNewBundleId(authorizeBO);
         List<AppleResultDTO> certificates = appleApiService.selectCertificates(authorizeBO);

@@ -5,6 +5,7 @@ import com.naoh.iossupersign.model.dto.AppleResultDTO;
 import com.naoh.iossupersign.model.po.DevicePO;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -30,6 +31,7 @@ public class DeviceBSService {
     }
 
     public void insert(DevicePO devicePO){
+        devicePO.setCreateTime(LocalDate.now());
         deviceService.insert(devicePO);
     }
 

@@ -1,6 +1,8 @@
 package com.naoh.iossupersign.thridparty.appleapi;
 
 import com.naoh.iossupersign.enums.AppleApiEnum;
+import com.naoh.iossupersign.enums.ServiceError;
+import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
 import com.naoh.iossupersign.model.dto.AppleApiResult;
 import com.naoh.iossupersign.model.dto.AppleReqBody;
@@ -65,16 +67,19 @@ public class AppleApiService extends AppleApi{
      * @return
      */
     public AppleResultDTO registerNewBundleId(AuthorizeBO authorizeBO){
-
-        HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
-        AppleReqBody attributes = AppleReqBody.init().add("identifier", "com.*").add("name", UUID.randomUUID().toString()).add("platform", "IOS");
-        AppleReqBody body = AppleReqBody.init().add("type", "bundleIds").add("attributes", attributes);
-        AppleReqBody data = AppleReqBody.init().add("data",body);
-        HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(data,headers);
-        String url = AppleApiEnum.REGISTER_NEW_BUNDLEID_API.getApiPath();
-        ResponseEntity<AppleApiResult<AppleResultDTO>> response = restTemplate.exchange(url,AppleApiEnum.REGISTER_NEW_BUNDLEID_API.getHttpMethod(),httpEntity,
-                new ParameterizedTypeReference<AppleApiResult<AppleResultDTO>>(){});
-        return response.getBody().getData();
+        try{
+            HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
+            AppleReqBody attributes = AppleReqBody.init().add("identifier", "com.*").add("name", UUID.randomUUID().toString()).add("platform", "IOS");
+            AppleReqBody body = AppleReqBody.init().add("type", "bundleIds").add("attributes", attributes);
+            AppleReqBody data = AppleReqBody.init().add("data",body);
+            HttpEntity<Map<String,Object>> httpEntity = new HttpEntity<>(data,headers);
+            String url = AppleApiEnum.REGISTER_NEW_BUNDLEID_API.getApiPath();
+            ResponseEntity<AppleApiResult<AppleResultDTO>> response = restTemplate.exchange(url,AppleApiEnum.REGISTER_NEW_BUNDLEID_API.getHttpMethod(),httpEntity,
+                    new ParameterizedTypeReference<AppleApiResult<AppleResultDTO>>(){});
+            return response.getBody().getData();
+        }catch (Exception e){
+            throw new ServiceException(ServiceError.CREATE_BUNDLE_ERROR);
+        }
     }
 
     /**
