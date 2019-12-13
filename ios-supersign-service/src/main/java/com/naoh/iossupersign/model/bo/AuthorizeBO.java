@@ -1,5 +1,6 @@
 package com.naoh.iossupersign.model.bo;
 
+import com.naoh.iossupersign.model.po.AppleAccountPO;
 import lombok.*;
 
 @Data
@@ -16,5 +17,11 @@ public class AuthorizeBO {
     private String iss;
 
     private String kid;
+
+    public AuthorizeBO(AppleAccountPO appleAccountPO){
+        this.iss = appleAccountPO.getIssuerId();
+        this.kid = appleAccountPO.getKid();
+        this.p8 = appleAccountPO.getP8();
+    }
 
 }

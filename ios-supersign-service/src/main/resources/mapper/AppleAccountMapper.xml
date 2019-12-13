@@ -45,5 +45,21 @@
         WHERE id = #{id}
     </select>
 
+    <select id="selectEnableAppleAccounts" resultType="AppleAccountPO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM apple_account
+        <![CDATA[
+        where  `count` < #{deviceLimit} order by `count` desc limit #{sizeLimit}
+        ]]>
+    </select>
+
+    <select id="updateDeviceCountLok">
+        SELECT 1 FROM apple_account WHERE account = #{account} FOR UPDATE;
+    </select>
+
+    <update id="updateAccountDeviceCount">
+        update apple_account set  `count` = #{deviceCount} where account = #{account}
+    </update>
 
 </mapper>
