@@ -1,6 +1,5 @@
 package com.naoh.iossupersign.storage.mysql.mapper;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import org.apache.ibatis.annotations.Mapper;
@@ -13,11 +12,15 @@ import org.springframework.stereotype.Repository;
  */
 @Mapper
 @Repository
-public interface IpaPackageMapper extends BaseMapper<IpaPackagePO>  {
+public interface IpaPackageMapper {
 
     Page<IpaPackagePO> selectPage(Page<IpaPackagePO> pageParam, @Param("name")String name);
 
     IpaPackagePO selectByName(@Param("name")String name);
 
+    int updateById(IpaPackagePO ipaPackagePO);
+
     int insert(IpaPackagePO ipaPackagePO);
+
+    IpaPackagePO selectById(Long id);
 }

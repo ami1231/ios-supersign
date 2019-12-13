@@ -31,4 +31,11 @@ public class IpaPackageServiceImpl implements IpaPackageService {
     public Page<IpaPackagePO> getIpaPackagePage(Page<IpaPackagePO> page, String name) {
         return ipaPackageMapper.selectPage(page, name);
     }
+
+    @Override
+    public IpaPackagePO selectIpaPackageById(Long id) {
+        return ipaPackageMapper.selectById(id);
+    }
+
+
 }

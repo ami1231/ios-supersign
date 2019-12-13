@@ -20,7 +20,7 @@ import java.time.LocalDateTime;
 public class IpaPackagePO implements Serializable {
 
     @ApiModelProperty(value = "id")
-    private long id;
+    private Long id;
 
     @ApiModelProperty(value = "包名")
     private String name;

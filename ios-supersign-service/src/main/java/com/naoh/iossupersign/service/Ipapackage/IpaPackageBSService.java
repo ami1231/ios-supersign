@@ -1,8 +1,8 @@
 package com.naoh.iossupersign.service.Ipapackage;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.naoh.iossupersign.model.bo.IpaPackageBO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
  */
 public interface IpaPackageBSService {
 
-    void uploadIpa(MultipartFile file, String summary);
+    void uploadIpa(IpaPackageBO ipaPackageBO);
 
     Page<IpaPackagePO> selectIpaByCondition(@NotNull Integer currentPage, String name);
 

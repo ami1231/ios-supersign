@@ -8,10 +8,11 @@ import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
 import com.naoh.iossupersign.enums.ServiceError;
 import com.naoh.iossupersign.exception.ServiceException;
+import com.naoh.iossupersign.model.bo.IpaPackageBO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
-import com.naoh.iossupersign.utils.FileUtils;
+import com.naoh.iossupersign.service.file.FileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
+import java.io.IOException;
 
 /**
  * @author Peter.Hong
@@ -36,25 +38,41 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
 
     private final IpaPackageService ipaPackageService;
 
+    private final FileService fileService;
+
     @Autowired
-    public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService) {
+    public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService, FileService fileService) {
         this.ipaPackageService = ipaPackageService;
+        this.fileService = fileService;
     }
 
     @Override
-    public void uploadIpa(MultipartFile file, String summary) {
+    public void uploadIpa(IpaPackageBO ipaPackageBO) {
 
-        String fileName = file.getOriginalFilename();
+        String fileName = ipaPackageBO.getFile().getOriginalFilename();
         String suffix = fileName.substring(fileName.lastIndexOf(FILE_NAME_SPLIT) + 1);
         if (suffix.equalsIgnoreCase(FILE_NAME)) {
             // 上传的文件为ipa文件
+            IpaPackagePO newIpaPackagePO = null;
             try {
-                IpaPackagePO ipaPackagePO = analyze(file, summary);
-                log.info("ipa detail : {}", ipaPackagePO);
-                ipaPackageService.insertIpaPackage(ipaPackagePO);
+                newIpaPackagePO = analyze(ipaPackageBO);
+                log.info("ipa detail : {}", newIpaPackagePO);
+                if(ipaPackageBO.getId() != null){
+                    IpaPackagePO ipaPackage = ipaPackageService.selectIpaPackageById(ipaPackageBO.getId());
+                    fileService.deleteFileIfExit(ipaPackage.getLink());
+                    ipaPackageService.updateIpaPackage(newIpaPackagePO);
+                }else{
+                    ipaPackageService.insertIpaPackage(newIpaPackagePO);
+                }
             } catch (Exception e) {
                 // 解析失敗
                 // throws exception
+                try {
+                    fileService.deleteFileIfExit(newIpaPackagePO.getLink());
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+
                 log.error("error" ,e);
                 throw new ServiceException(ServiceError.INSERT_DATA_FAILURE);
             }
@@ -76,7 +94,9 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         return ipaPackageService.getIpaPackagePage(page, name);
     }
 
-    private IpaPackagePO analyze(MultipartFile file, String summary) throws Exception{
+    private IpaPackagePO analyze(IpaPackageBO ipaPackageBO) throws Exception{
+        MultipartFile file =  ipaPackageBO.getFile();
+        String summary = ipaPackageBO.getSummary();
 
         File excelFile = File.createTempFile(UUID.randomUUID().toString(), ".ipa");
         file.transferTo(excelFile);
@@ -93,11 +113,12 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         String miniVersion = parse.get("MinimumOSVersion").toString();
         String id = parse.get("CFBundleIdentifier").toString();
 
-        String appLink = FileUtils.uploadFile(excelFile);
+        String appLink = fileService.uploadFile(excelFile);
         if (appLink != null) {
-            System.out.println("ipa文件上传完成");
+            log.info("ipa文件上传完成");
         }
         return IpaPackagePO.builder()
+                .id(ipaPackageBO.getId())
                 .name(name)
                 .version(version)
                 .buildVersion(buildVersion)
@@ -112,7 +133,7 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         File payload = new File(ipaFile.getAbsolutePath() + "/Payload/");
         if (payload != null) {
             for (File file : payload.listFiles()) {
-                if (FileUtils.getSuffixName(file).equalsIgnoreCase("app")) {
+                if (fileService.getSuffixName(file).equalsIgnoreCase("app")) {
                     return file;
                 }
             }

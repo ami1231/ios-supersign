@@ -1,8 +1,10 @@
 package com.naoh.iossupersign.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.naoh.iossupersign.assembly.IpaPackageAssembly;
 import com.naoh.iossupersign.base.ApiResult;
 import com.naoh.iossupersign.exception.ServiceException;
+import com.naoh.iossupersign.model.bo.IpaPackageBO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import io.swagger.annotations.Api;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,8 +33,15 @@ public class IpaController {
 
     private static final Integer DEFAULT_PAGE = 1;
 
+    private final IpaPackageBSService ipaPackageBSService;
+
+    private final IpaPackageAssembly ipaPackageAssembly;
+
     @Autowired
-    private IpaPackageBSService ipaPackageBSService;
+    public IpaController(IpaPackageBSService ipaPackageBSService, IpaPackageAssembly ipaPackageAssembly) {
+        this.ipaPackageBSService = ipaPackageBSService;
+        this.ipaPackageAssembly = ipaPackageAssembly;
+    }
 
     @RequestMapping("/index")
     public String index(Model model){
@@ -45,7 +55,8 @@ public class IpaController {
     public ApiResult<String> uploadPackage(@RequestPart(value = "ipaFile")MultipartFile file, @RequestParam("summary")String summary) {
         ApiResult<String> result = new ApiResult<>();
         try {
-            ipaPackageBSService.uploadIpa(file, summary);
+            IpaPackageBO ipaPackageBO = ipaPackageAssembly.assembleDeviceBO(null, file, summary);
+            ipaPackageBSService.uploadIpa(ipaPackageBO);
             result.setCode(ApiResult.SUCCESS_CODE);
             result.setMsg(ApiResult.SUCCESS_MSG);
 
@@ -54,6 +65,23 @@ public class IpaController {
         }
         return result;
     }
+
+    @ApiOperation(value = "/uploadPackage/{id}", notes = "修改ipa", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    @PostMapping(value = "/uploadPackage/{id}")
+    public ApiResult<String> updatePackage(@PathVariable(value = "id")Long id, @RequestPart(value = "ipaFile")MultipartFile file, @RequestParam("summary")String summary) {
+        ApiResult<String> result = new ApiResult<>();
+        try {
+            IpaPackageBO ipaPackageBO = ipaPackageAssembly.assembleDeviceBO(id, file, summary);
+            ipaPackageBSService.uploadIpa(ipaPackageBO);
+            result.setCode(ApiResult.SUCCESS_CODE);
+            result.setMsg(ApiResult.SUCCESS_MSG);
+        }catch (ServiceException e){
+            result.setMsg(e.getErrorMsg());
+        }
+        return result;
+    }
+
 
     @GetMapping("/search")
     public String search(@RequestParam(value = "page") Integer currentPage, String name, Model model){

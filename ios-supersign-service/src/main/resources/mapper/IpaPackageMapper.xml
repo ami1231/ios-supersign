@@ -24,5 +24,44 @@
     values(#{name}, #{icon}, #{version}, #{buildVersion}, #{miniVersion}, #{bundleIdentifier}, #{link}, #{summary})
     </insert>
 
+    <update id="updateById">
+        update ipa_package
+        <set>
+            <if test="name != null">
+                `name` = #{name},
+            </if>
+            <if test="icon != null">
+                icon = #{icon},
+            </if>
+            <if test="version != null">
+                version = #{version},
+            </if>
+            <if test="buildVersion != null">
+                build_version = #{buildVersion},
+            </if>
+            <if test="miniVersion != null">
+                mini_version = #{miniVersion},
+            </if>
+            <if test="bundleIdentifier != null">
+                bundle_identifier = #{bundleIdentifier},
+            </if>
+            <if test="link != null">
+                link = #{link},
+            </if>
+            <if test="summary != null">
+                summary = #{summary},
+            </if>
+            update_time = now()
+        </set>
+        where id = #{id}
+
+    </update>
+
+    <select id="selectById" resultType="IpaPackagePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ipa_package
+        where id = #{id}
+    </select>
 
 </mapper>

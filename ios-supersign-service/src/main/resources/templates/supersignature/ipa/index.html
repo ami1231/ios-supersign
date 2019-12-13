@@ -49,7 +49,9 @@
 								<td width="20%">[[${item.buildVersion}]]</td>
 								<td width="20%">[[${#temporals.format(item.updateTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 								<td width="20%">[[${item.count}]]</td>
-								<td width="20%"></td>
+								<td width="20%">
+									<a href="javascript:void(0);" class="btn btn-primary btn-xs btn-t edit-show" th:data-id="${item.id}" onclick="showEditModal(this)">修改IPA</a>
+								</td>
 							</tr>
 						</tbody>
 					</table>
@@ -64,6 +66,7 @@
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
 							<h4 class="modal-title">上传</h4>
 						</div>
+						<input id="ipaId" type="hidden" name="ipaId">
 						<div class="modal-body">
 							<form id="addIpaForm">
 								<div class="row ml-12 mt-5">
@@ -86,7 +89,8 @@
 						</div>
 						<div class="modal-footer">
 							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
-							<button type="button" class="btn btn-primary" onclick="upload()">提交</button>
+							<button type="button" id="addIpaBtn" class="btn btn-primary" onclick="upload('insert')">确定新增</button>
+							<button type="button" id="editIpaBtn" class="btn btn-primary" onclick="upload('edit')">确定修改</button>
 						</div>
 					</div>
 					<!-- /.modal-content -->
@@ -103,9 +107,12 @@
 		<script type="text/javascript">
 			function showAddModal(){
                 $("#myModalAdd").modal("show");
+                $("#editIpaBtn").hide();
+                $("#addIpaBtn").show();
+                $("#ipaId").val();
 			}
 			
-			function upload(){
+			function upload(method){
                 var formData = new FormData();  //建構new FormData()
                 var fileData = $("input[name=file]")[0].files[0];   //取得上傳檔案屬性
                 var summary = $('#summary').val();
@@ -113,9 +120,15 @@
                 formData.append('ipaFile', fileData);  //吧物件加到file後面
                 formData.append('summary', summary);
 
+                var url = "/ipa/uploadPackage";
+                if(method==='edit'){
+                    var id = $("#ipaId").val();
+                    url += "/"+id;
+				}
+
 				$.ajax({
 					type: "POST",
-					url: "/ipa/uploadPackage",
+					url: url,
 					data: formData,
                     processData: false,
                     contentType: false,
@@ -130,6 +143,14 @@
 						}
 					}
 				});
+			}
+
+			function showEditModal(element){
+                $("#myModalAdd").modal("show");
+                $(element).attr("data-id")
+                $("#ipaId").val($(element).attr("data-id"));
+                $("#addIpaBtn").hide();
+                $("#editIpaBtn").show();
 			}
 
             function pagination(page) {

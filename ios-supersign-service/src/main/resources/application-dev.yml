@@ -28,3 +28,4 @@ server:
     min-spare-threads: 5
 debug: true
 
+fileUploadPath: ipa/

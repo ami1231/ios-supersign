@@ -14,4 +14,6 @@ public interface IpaPackageService {
     void updateIpaPackage(IpaPackagePO ipaPackagePO);
 
     Page<IpaPackagePO> getIpaPackagePage(Page<IpaPackagePO> page, String name);
+
+    IpaPackagePO selectIpaPackageById(Long id);
 }
