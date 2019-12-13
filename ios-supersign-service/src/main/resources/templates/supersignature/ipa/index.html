@@ -35,7 +35,7 @@
 								<th>版本</th>
 								<th>修改时间</th>
 								<th>设备量</th>
-								<!--<th>操作</th>-->
+								<th>操作</th>
 							</tr>
 						</thead>
 						<tbody id="sortable">
@@ -49,12 +49,12 @@
 								<td width="20%">[[${item.buildVersion}]]</td>
 								<td width="20%">[[${#temporals.format(item.updateTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 								<td width="20%">[[${item.count}]]</td>
-								<!--<td></td>-->
+								<td width="20%"></td>
 							</tr>
 						</tbody>
 					</table>
 				</div>
-				<div th:if="${!#lists.isEmpty(page.getRecords())}" th:include="page :: page"></div>
+				<div th:include="page :: page"></div>
 			</div>
 			<!-- Modal -->
 			<div class="modal fade" id="myModalAdd" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

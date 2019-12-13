@@ -6,7 +6,7 @@
 </head>
 <body>
 <div th:fragment="page">
-	<div class="row" th:if="${page!=null}"
+	<div class="row" th:if="${page!=null && #lists.size(page.getRecords())>0}"
 		 th:with="pages=${((page.total + page.size - 1) / page.size) <= 0 ? 1 : (page.total + page.size - 1) / page.size}">
 		<div th:if="${pages <= 10 && page.size != 0 }" class="form-group col-md-11 pagination-centered">
 			<ul class="pagination">
