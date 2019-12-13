@@ -4,7 +4,7 @@
 
     <sql id="Base_Column_List">
     id, `name`, icon, version, build_version, mini_version, bundle_identifier,
-    link, summary, create_time, `count`, update_time
+    link, summary, create_time, `count`, update_time, ipa_download_id
   </sql>
 
     <select id="selectPage" resultType="IpaPackagePO">
@@ -20,8 +20,8 @@
 
     <insert id="insert" parameterType = "IpaPackagePO">
         insert into ipa_package(`name`, icon, version, build_version, mini_version, bundle_identifier,
-    link, summary)
-    values(#{name}, #{icon}, #{version}, #{buildVersion}, #{miniVersion}, #{bundleIdentifier}, #{link}, #{summary})
+    link, summary, ipa_download_id)
+    values(#{name}, #{icon}, #{version}, #{buildVersion}, #{miniVersion}, #{bundleIdentifier}, #{link}, #{summary}, #{ipaDownloadId})
     </insert>
 
     <update id="updateById">
@@ -62,6 +62,13 @@
         <include refid="Base_Column_List"/>
         FROM ipa_package
         where id = #{id}
+    </select>
+
+    <select id="selectByDownloadId" resultType="IpaPackagePO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM ipa_package
+        where ipa_download_id = #{ipaDownloadId}
     </select>
 
 </mapper>

@@ -12,6 +12,7 @@ create table if not exists ipa_package
 	create_time timestamp default CURRENT_TIMESTAMP not null comment '创建时间',
 	update_time timestamp default CURRENT_TIMESTAMP not null comment '修改时间',
 	`count` int default 0 not null comment '总下载量',
+	ipa_download_id varchar(64) not null comment 'user下载地址Id',
 	UNIQUE KEY (bundle_identifier),
 	UNIQUE KEY (link)
 )

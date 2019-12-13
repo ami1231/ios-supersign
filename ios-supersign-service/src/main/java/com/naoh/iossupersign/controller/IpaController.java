@@ -86,7 +86,7 @@ public class IpaController {
     @GetMapping("/search")
     public String search(@RequestParam(value = "page") Integer currentPage, String name, Model model){
 
-        Page<IpaPackagePO> page = ipaPackageBSService.selectIpaByCondition(currentPage, name);
+        Page<IpaPackagePO> page = ipaPackageBSService.selectIpaByName(currentPage, name);
 
         model.addAttribute("page", page);
         model.addAttribute("name", name);

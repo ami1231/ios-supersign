@@ -37,5 +37,10 @@ public class IpaPackageServiceImpl implements IpaPackageService {
         return ipaPackageMapper.selectById(id);
     }
 
+    @Override
+    public IpaPackagePO selectByDownloadId(String downloadId) {
+        return ipaPackageMapper.selectByDownloadId(downloadId);
+    }
+
 
 }

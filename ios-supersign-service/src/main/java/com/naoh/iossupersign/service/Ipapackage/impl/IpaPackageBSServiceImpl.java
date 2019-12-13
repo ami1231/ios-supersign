@@ -1,8 +1,10 @@
 package com.naoh.iossupersign.service.Ipapackage.impl;
 
+import cn.hutool.Hutool;
 import cn.hutool.core.io.file.FileReader;
 import cn.hutool.core.lang.UUID;
 import cn.hutool.core.util.ZipUtil;
+import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
@@ -13,9 +15,11 @@ import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.file.FileService;
+import com.naoh.iossupersign.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
@@ -85,7 +89,7 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
     }
 
     @Override
-    public Page<IpaPackagePO> selectIpaByCondition(@NotNull Integer currentPage, String name) {
+    public Page<IpaPackagePO> selectIpaByName(@NotNull Integer currentPage, String name) {
 
         Page<IpaPackagePO> page = new Page<>();
         page.setCurrent(currentPage.longValue());
@@ -94,10 +98,14 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         return ipaPackageService.getIpaPackagePage(page, name);
     }
 
+    @Override
+    public IpaPackagePO selectIpaByDownloadId(@NotNull String downloadId) {
+        return ipaPackageService.selectByDownloadId(downloadId);
+    }
+
     private IpaPackagePO analyze(IpaPackageBO ipaPackageBO) throws Exception{
         MultipartFile file =  ipaPackageBO.getFile();
         String summary = ipaPackageBO.getSummary();
-
         File excelFile = File.createTempFile(UUID.randomUUID().toString(), ".ipa");
         file.transferTo(excelFile);
         File ipa = ZipUtil.unzip(excelFile);
@@ -111,21 +119,26 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         String version = parse.get("CFBundleShortVersionString").toString();
         String buildVersion = parse.get("CFBundleVersion").toString();
         String miniVersion = parse.get("MinimumOSVersion").toString();
-        String id = parse.get("CFBundleIdentifier").toString();
+        String bundleIdentifier = parse.get("CFBundleIdentifier").toString();
 
         String appLink = fileService.uploadFile(excelFile);
         if (appLink != null) {
             log.info("ipa文件上传完成");
         }
+
+        // 下載包url標示
+        String ipaDownloadId = DigestUtils.md5DigestAsHex(bundleIdentifier.getBytes());
+
         return IpaPackagePO.builder()
                 .id(ipaPackageBO.getId())
                 .name(name)
                 .version(version)
                 .buildVersion(buildVersion)
                 .miniVersion(miniVersion)
-                .bundleIdentifier(id)
+                .bundleIdentifier(bundleIdentifier)
                 .link(appLink)
                 .summary(summary)
+                .ipaDownloadId(ipaDownloadId)
                 .build();
     }
 
@@ -133,13 +146,12 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         File payload = new File(ipaFile.getAbsolutePath() + "/Payload/");
         if (payload != null) {
             for (File file : payload.listFiles()) {
-                if (fileService.getSuffixName(file).equalsIgnoreCase("app")) {
+                if (FileUtils.getSuffixName(file).equalsIgnoreCase("app")) {
                     return file;
                 }
             }
         }
         return null;
     }
-
 
 }
