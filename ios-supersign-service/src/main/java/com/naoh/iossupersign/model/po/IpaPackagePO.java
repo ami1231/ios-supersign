@@ -53,4 +53,7 @@ public class IpaPackagePO implements Serializable {
 
     private LocalDateTime updateTime;
 
+    @ApiModelProperty(value = "user下載資源位置")
+    private String ipaDownloadId;
+
 }

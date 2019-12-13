@@ -16,4 +16,6 @@ public interface IpaPackageService {
     Page<IpaPackagePO> getIpaPackagePage(Page<IpaPackagePO> page, String name);
 
     IpaPackagePO selectIpaPackageById(Long id);
+
+    IpaPackagePO selectByDownloadId(String downloadId);
 }

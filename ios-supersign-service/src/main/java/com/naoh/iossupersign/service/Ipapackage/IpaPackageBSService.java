@@ -14,6 +14,8 @@ public interface IpaPackageBSService {
 
     void uploadIpa(IpaPackageBO ipaPackageBO);
 
-    Page<IpaPackagePO> selectIpaByCondition(@NotNull Integer currentPage, String name);
+    Page<IpaPackagePO> selectIpaByName(@NotNull Integer currentPage, String name);
+
+    IpaPackagePO selectIpaByDownloadId(@NotNull String downloadId);
 
 }

@@ -16,9 +16,9 @@ public interface IpaPackageMapper {
 
     Page<IpaPackagePO> selectPage(Page<IpaPackagePO> pageParam, @Param("name")String name);
 
-    IpaPackagePO selectByName(@Param("name")String name);
+    IpaPackagePO selectByDownloadId(@Param("ipaDownloadId")String ipaDownloadId);
 
-    int updateById(IpaPackagePO ipaPackagePO);
+    int update(IpaPackagePO ipaPackagePO);
 
     int insert(IpaPackagePO ipaPackagePO);
 

@@ -24,7 +24,7 @@ public class IpaPackageServiceImpl implements IpaPackageService {
 
     @Override
     public void updateIpaPackage(IpaPackagePO ipaPackagePO) {
-        ipaPackageMapper.updateById(ipaPackagePO);
+        ipaPackageMapper.update(ipaPackagePO);
     }
 
     @Override
@@ -35,6 +35,11 @@ public class IpaPackageServiceImpl implements IpaPackageService {
     @Override
     public IpaPackagePO selectIpaPackageById(Long id) {
         return ipaPackageMapper.selectById(id);
+    }
+
+    @Override
+    public IpaPackagePO selectByDownloadId(String downloadId) {
+        return ipaPackageMapper.selectByDownloadId(downloadId);
     }
 
 
