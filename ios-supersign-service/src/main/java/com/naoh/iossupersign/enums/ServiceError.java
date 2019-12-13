@@ -11,6 +11,12 @@ public enum ServiceError {
     INSERT_DATA_FAILURE(HttpStatusEnum.SERVER_ERROR.status, "0010004", "新增资料失败"),
     UPDATE_DATA_FAILURE(HttpStatusEnum.SERVER_ERROR.status, "0010005", "更新资料失败"),
     DELETE_DATA_FAILURE(HttpStatusEnum.SERVER_ERROR.status, "0010006", "删除资料失败"),
+
+    /**
+     * 绑定账号错误
+     */
+    NO_ENABLE_APPLE_ACCOUNT(HttpStatusEnum.CONFLICT.status, "0020001", "下载失败-0020001")
+
     ;
     public Integer httpStatus;
     public String code;

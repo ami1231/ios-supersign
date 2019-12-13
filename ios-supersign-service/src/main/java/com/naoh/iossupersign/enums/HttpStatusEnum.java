@@ -1,7 +1,7 @@
 package com.naoh.iossupersign.enums;
 
 /**
- * @author RayChen
+ * @author Ami
  * @data 2019/10/1 下午 07:35
  */
 public enum HttpStatusEnum {

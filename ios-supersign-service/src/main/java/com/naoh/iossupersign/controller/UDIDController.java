@@ -28,7 +28,7 @@ import java.io.*;
 public class UDIDController {
 
     @Autowired
-    ServletContext context;
+    private ServletContext context;
 
     @Autowired
     private UDIDBSService udidbsService;
@@ -63,7 +63,10 @@ public class UDIDController {
             String xml = sb.toString().substring(sb.toString().indexOf("<?xml"), sb.toString().indexOf("</plist>")+8);
             NSDictionary parse = (NSDictionary) PropertyListParser.parse(xml.getBytes());
             String udid = (String) parse.get("UDID").toJavaObject();
-            System.out.println(udid);
+            Boolean isSuccess = udidbsService.bindUdidToAppleAccount(udid);
+
+            //TODO 导出IPA下载画面
+
         } catch (Exception e) {
             e.printStackTrace();
         }

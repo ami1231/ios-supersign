@@ -7,6 +7,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @author Ami.Tsai
  * @date 2019/12/10
@@ -20,4 +22,10 @@ public interface AppleAccountMapper extends BaseMapper<AppleAccountPO> {
     Page<AppleAccountPO> selectAppleAccountByCondition(Page<AppleAccountPO> page, @Param("appleAccountPO") AppleAccountPO appleAccountPO);
 
     AppleAccountPO getAccountById(Long id);
+
+    List<AppleAccountPO> selectEnableAppleAccounts(@Param("deviceLimit") Integer deviceLimit, @Param("sizeLimit") Integer sizeLimit);
+
+    void updateDeviceCountLok(@Param("account") String account);
+
+    void updateAccountDeviceCount(@Param("account") String account, @Param("deviceCount") Integer deviceCount);
 }

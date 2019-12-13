@@ -1,6 +1,8 @@
 package com.naoh.iossupersign.service.appleaccount;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.naoh.iossupersign.cache.RedisCache;
+import com.naoh.iossupersign.cache.RedisKey;
 import com.naoh.iossupersign.enums.ServiceError;
 import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
@@ -8,6 +10,7 @@ import com.naoh.iossupersign.model.dto.AppleResultDTO;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
+import io.swagger.models.auth.In;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -25,10 +28,17 @@ public class AppleAccountBSService {
 
     private final DeviceBSService deviceBSService;
 
-    public AppleAccountBSService(AppleApiService appleApiService, AppleAccountService appleAccountService, DeviceBSService deviceBSService) {
+    private final RedisCache redisCache;
+
+    public static final Integer DEVICE_LIMIT = 100 ;
+
+    public static final Integer SELECT_ENABLE_LIMIT = 100 ;
+
+    public AppleAccountBSService(AppleApiService appleApiService, AppleAccountService appleAccountService, DeviceBSService deviceBSService, RedisCache redisCache) {
         this.appleApiService = appleApiService;
         this.appleAccountService = appleAccountService;
         this.deviceBSService = deviceBSService;
+        this.redisCache = redisCache;
     }
 
     /**
@@ -86,7 +96,17 @@ public class AppleAccountBSService {
         return appleAccountService.getAccountById(id);
     }
 
-    public AppleAccountPO selectBestAppleAccount() {
-        return null;
+    public List<AppleAccountPO> selectBestAppleAccount() {
+        //找出可用最佳Apple账号
+        List<AppleAccountPO> appleAccountPOS = appleAccountService.selectEnableAppleAccounts(DEVICE_LIMIT,SELECT_ENABLE_LIMIT);
+        if(CollectionUtils.isEmpty(appleAccountPOS)){
+            //无可用Apple账号
+            throw new ServiceException(ServiceError.NO_ENABLE_APPLE_ACCOUNT);
+        }
+        return appleAccountPOS;
+    }
+
+    public void updateAccountDeviceCount(String account, Integer deviceCount){
+        appleAccountService.updateAccountDeviceCount(account,deviceCount);
     }
 }
