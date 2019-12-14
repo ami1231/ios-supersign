@@ -22,7 +22,6 @@ public class IosUrlUtils {
      */
     public static String getRedirectIpaViewUrl(String udidDownloadUrl , String ipaId ,String udid){
         return udidDownloadUrl+"/udid/app/ipa/"+ipaId+"?udid="+udid;
-        //return "itms-services://?action=download-manifest&url="+udidDownloadUrl+"/udid/app/ipa/"+ipaId+"?udid="+udid;
     }
 
     /**

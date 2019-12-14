@@ -98,7 +98,7 @@ public class UDIDController {
             Boolean isSuccess = udidbsService.bindUdidToAppleAccount(udid);
             if(isSuccess){
                 System.out.println(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
-                response.sendRedirect(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
+//                response.sendRedirect(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
                 response.setStatus(301);
                 response.setHeader("Location",IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
             }
