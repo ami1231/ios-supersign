@@ -5,7 +5,6 @@ import com.dd.plist.PropertyListParser;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -52,12 +51,18 @@ public class UDIDController {
         this.ipaPackageService = ipaPackageService;
     }
 
+    @GetMapping("index")
+    public String index(){
+        return "";
+    }
+
     @GetMapping("/app/index/{ipaid}")
     public String downloadMobileConfig(@PathVariable String ipaId , Model model)  {
         IpaPackagePO ipaPackagePO = ipaPackageService.selectByDownloadId(ipaId);
-        model.addAttribute("iconPath",ipaPackagePO.getIcon());
+        model.addAttribute("iconPath",udidownloadurl+ipaPackagePO.getIcon());
         model.addAttribute("appName",ipaPackagePO.getName());
-        return "";
+        model.addAttribute("ipaId",ipaId);
+        return "appdownload/ipadownload";
     }
 
 

@@ -37,6 +37,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/metisMenu/**");
         web.ignoring().antMatchers("/front-awesome/**");
         web.ignoring().antMatchers("/bootstrap/**");
+        web.ignoring().antMatchers("/download/**");
         //解決服務註冊url被攔截的問題
         web.ignoring().antMatchers("/ipa/uploadPackage/**");
         web.ignoring().antMatchers("/actuator/*");
@@ -44,6 +45,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         web.ignoring().antMatchers("/mobileconfig/*");
         web.ignoring().antMatchers("/ipa/*");
         web.ignoring().antMatchers("/apps/download/**");
+        web.ignoring().antMatchers("/udid/*");
     }
 
     @Override
