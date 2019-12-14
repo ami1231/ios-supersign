@@ -58,4 +58,8 @@
         update apple_account set  `count` = `count`+#{deviceCount} where account = #{account}
     </update>
 
+    <update id="updateAccountP12Path">
+        update apple_account set  p12 = #{p12} where account = #{account}
+    </update>
+
 </mapper>

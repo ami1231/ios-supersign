@@ -2,6 +2,7 @@ package com.naoh.iossupersign.service.device.impl;
 
 import com.naoh.iossupersign.assembly.DeviceAssembly;
 import com.naoh.iossupersign.model.dto.AppleResultDTO;
+import com.naoh.iossupersign.model.po.AccountDevicePO;
 import com.naoh.iossupersign.model.po.DevicePO;
 import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.service.device.DeviceService;
@@ -38,6 +39,11 @@ public class DeviceBSServiceImpl implements DeviceBSService {
     public void insert(DevicePO devicePO){
         devicePO.setCreateTime(LocalDate.now());
         deviceService.insert(devicePO);
+    }
+
+    @Override
+    public AccountDevicePO getAccountDeviceByUdid(String udid) {
+        return deviceService.getAccountDeviceByUdid(udid);
     }
 
 }

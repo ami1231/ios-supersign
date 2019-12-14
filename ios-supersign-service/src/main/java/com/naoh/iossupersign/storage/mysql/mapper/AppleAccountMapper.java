@@ -26,4 +26,6 @@ public interface AppleAccountMapper extends BaseMapper<AppleAccountPO> {
     List<AppleAccountPO> selectEnableAppleAccounts(@Param("deviceLimit") Integer deviceLimit, @Param("sizeLimit") Integer sizeLimit);
 
     void updateAccountDeviceCount(@Param("account") String account, @Param("deviceCount") Integer deviceCount);
+
+    void updateAccountP12Path(@Param("account")String account, @Param("p12")String p12Path);
 }

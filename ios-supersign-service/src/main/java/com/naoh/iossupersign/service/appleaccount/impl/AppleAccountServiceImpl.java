@@ -47,4 +47,9 @@ public class AppleAccountServiceImpl implements AppleAccountService {
     public void updateAccountDeviceCount(String account, Integer deviceCount) {
         appleAccountMapper.updateAccountDeviceCount(account,deviceCount);
     }
+
+    @Override
+    public void updateAccountP12Path(String account, String p12Path) {
+        appleAccountMapper.updateAccountP12Path(account, p12Path);
+    }
 }

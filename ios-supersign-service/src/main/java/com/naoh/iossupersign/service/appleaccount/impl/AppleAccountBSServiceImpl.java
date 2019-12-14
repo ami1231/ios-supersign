@@ -1,5 +1,6 @@
 package com.naoh.iossupersign.service.appleaccount.impl;
 
+import cn.hutool.core.lang.UUID;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.cache.RedisCache;
 import com.naoh.iossupersign.cache.RedisKey;
@@ -11,10 +12,15 @@ import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountService;
 import com.naoh.iossupersign.service.device.DeviceBSService;
+import com.naoh.iossupersign.service.file.FileService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -22,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class AppleAccountBSServiceImpl implements AppleAccountBSService {
 
     private final AppleApiService appleApiService;
@@ -32,15 +39,22 @@ public class AppleAccountBSServiceImpl implements AppleAccountBSService {
 
     private final RedisCache redisCache;
 
+    private final FileService fileService;
+
+    @Value("${file.p12UploadPath}")
+    private String fileUploadPath;
+
     public static final Integer DEVICE_LIMIT = 100 ;
 
     public static final Integer SELECT_ENABLE_LIMIT = 100 ;
 
-    public AppleAccountBSServiceImpl(AppleApiService appleApiService, AppleAccountService appleAccountService, DeviceBSService deviceBSService, RedisCache redisCache) {
+    @Autowired
+    public AppleAccountBSServiceImpl(AppleApiService appleApiService, AppleAccountService appleAccountService, DeviceBSService deviceBSService, RedisCache redisCache, FileService fileService) {
         this.appleApiService = appleApiService;
         this.appleAccountService = appleAccountService;
         this.deviceBSService = deviceBSService;
         this.redisCache = redisCache;
+        this.fileService = fileService;
     }
 
     /**
@@ -121,5 +135,19 @@ public class AppleAccountBSServiceImpl implements AppleAccountBSService {
     @Override
     public Long addAppleDeviceCountToRedis(String appleAccount, Long deviceCount){
         return redisCache.hincr(RedisKey.APPLE_ACCOUNT_DEVICE_COUNT_KEY,appleAccount,deviceCount);
+    }
+
+    @Override
+    public void uploadP12(MultipartFile p12File, String account) {
+        String filePath = fileUploadPath+UUID.randomUUID().toString()+".p12";
+
+        try{
+            // TODO: 2019/12/14 上傳地址需確認
+            fileService.uploadFile(p12File.getBytes(), filePath);
+            appleAccountService.updateAccountP12Path(account, filePath);
+        }catch (Exception e){
+            log.error("Upload P12 File error", e);
+            throw new ServiceException(ServiceError.INVALID_PARAMETER);
+        }
     }
 }

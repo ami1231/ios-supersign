@@ -8,11 +8,9 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -37,7 +35,7 @@ public class DownloadController {
         respHeaders.setContentType(MediaType.TEXT_XML);
         respHeaders.setCacheControl("must-revalidate, post-check=0, pre-check=0");
         respHeaders.set(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + "manifest.plist");
-        return new ResponseEntity<byte[]>(plist.getBytes(), respHeaders, HttpStatus.OK);
+        return new ResponseEntity<>(plist.getBytes(), respHeaders, HttpStatus.OK);
     }
 
 }

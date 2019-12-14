@@ -28,7 +28,10 @@ server:
     min-spare-threads: 5
 debug: true
 
-fileUploadPath: ipa/
+file:
+  ipaUploadPath: ipa/
+  p12UploadPath: p12/
+  profileUploadPath: profile/
 
 ipa:
   download:

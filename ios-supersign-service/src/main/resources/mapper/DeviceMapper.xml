@@ -31,4 +31,13 @@
         where udid = #{udid,jdbcType=VARCHAR}
     </select>
 
+
+    <select id = "getAccountDeviceByUdid" resultType="AccountDevicePO">
+        SELECT d.udid, d.device_id, a.account, a.p8, a.issuer_id, a.kid, a.p12,
+        a.cer_id, a.bundle_ids
+        from device d
+        join apple_account a on d.apple_id = a.id
+        where d.udid = #{udid}
+    </select>
+
 </mapper>

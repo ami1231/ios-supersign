@@ -17,4 +17,6 @@ public interface AppleAccountService {
     List<AppleAccountPO> selectEnableAppleAccounts(Integer deviceLimit, Integer sizeLimit);
 
     void updateAccountDeviceCount(String account, Integer deviceCount);
+
+    void updateAccountP12Path(String account, String p12Path);
 }

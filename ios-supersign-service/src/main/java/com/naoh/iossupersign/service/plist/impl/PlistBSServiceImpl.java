@@ -1,11 +1,13 @@
 package com.naoh.iossupersign.service.plist.impl;
 
+import com.naoh.iossupersign.model.po.AccountDevicePO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
+import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.service.plist.PlistBService;
+import com.naoh.iossupersign.service.profile.ProfileBSService;
 import com.naoh.iossupersign.utils.IosUrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -28,12 +30,20 @@ public class PlistBSServiceImpl implements PlistBService {
 
     private final IpaPackageBSService ipaPackageBSService;
 
+    private final DeviceBSService deviceBSService;
+
+    private final ProfileBSService profileBSService;
+
+
     @Value("${ipa.download.url}")
     private String ipaDownloadUrl;
 
+
     @Autowired
-    public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService) {
+    public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService, DeviceBSService deviceBSService, ProfileBSService profileBSService) {
         this.ipaPackageBSService = ipaPackageBSService;
+        this.deviceBSService = deviceBSService;
+        this.profileBSService = profileBSService;
     }
 
     @PostConstruct
@@ -48,7 +58,10 @@ public class PlistBSServiceImpl implements PlistBService {
         IpaPackagePO ipaPackagePO = ipaPackageBSService.selectIpaByDownloadId(downloadId);
 
         // 利用udid拿取appleAccount資訊
+        AccountDevicePO accountDevicePO = deviceBSService.getAccountDeviceByUdid(udid);
 
+        // 拿取新的profile(重簽需要)
+        String profilePath = profileBSService.createNewProfile(accountDevicePO);
         // 重簽回傳下載url
 
         // 組plist

@@ -1,5 +1,6 @@
 package com.naoh.iossupersign.service.device.impl;
 
+import com.naoh.iossupersign.model.po.AccountDevicePO;
 import com.naoh.iossupersign.model.po.DevicePO;
 import com.naoh.iossupersign.service.device.DeviceService;
 import com.naoh.iossupersign.storage.mysql.mapper.DeviceMapper;
@@ -29,5 +30,10 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public void insert(DevicePO devicePO){
         deviceMapper.insert(devicePO);
+    }
+
+    @Override
+    public AccountDevicePO getAccountDeviceByUdid(String udid) {
+        return deviceMapper.getAccountDeviceByUdid(udid);
     }
 }
