@@ -90,11 +90,11 @@ public class AppleApiService extends AppleApi{
      * @param devId
      * @return
      */
-    public AppleResultDTO getMobileprovision(AuthorizeBO authorizeBO, String bundleId, String cerId, String devId){
+    public AppleResultDTO getMobileprovision(AuthorizeBO authorizeBO, String bundleId, String cerId, String devId, String fileName){
 
         HttpHeaders headers = getToken(authorizeBO.getP8(), authorizeBO.getIss(), authorizeBO.getKid());
 
-        AppleReqBody attributes = AppleReqBody.init().add("name", "Mobileprovision123").add("profileType", "IOS_APP_DEVELOPMENT");
+        AppleReqBody attributes = AppleReqBody.init().add("name", fileName).add("profileType", "IOS_APP_DEVELOPMENT");
         AppleReqBody relationships = getProfileRelationships(bundleId, cerId, devId);
         AppleReqBody body = AppleReqBody.init().add("attributes", attributes).add("relationships", relationships).add("type","profiles");
         AppleReqBody data = AppleReqBody.init().add("data",body);

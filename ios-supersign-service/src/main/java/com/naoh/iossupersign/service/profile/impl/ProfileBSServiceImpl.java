@@ -40,11 +40,14 @@ public class ProfileBSServiceImpl implements ProfileBSService {
                 .p8(accountDevicePO.getP8())
                 .kid(accountDevicePO.getKid())
                 .build();
-        AppleResultDTO appleResultDTO = appleApiService.getMobileprovision(authorizeBO, accountDevicePO.getBundleIds(),accountDevicePO.getCerId(), accountDevicePO.getUdid());
+
+        String profileName = UUID.randomUUID().toString();
+
+        AppleResultDTO appleResultDTO = appleApiService.getMobileprovision(authorizeBO, accountDevicePO.getBundleIds(),accountDevicePO.getCerId(), accountDevicePO.getDeviceId(), profileName);
 
         String profileContentBase64 = (String)appleResultDTO.getAttributes().get("profileContent");
 
-        String pathName = fileUploadPath+UUID.randomUUID().toString()+".mobileprovision";
+        String pathName = fileUploadPath+profileName+".mobileprovision";
 
         return uploadProfile(profileContentBase64, pathName);
     }

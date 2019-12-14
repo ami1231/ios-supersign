@@ -57,7 +57,7 @@ public class PlistBSServiceImpl implements PlistBService {
         // 拿取新的profile(重簽需要)
         String profilePath = profileBSService.createNewProfile(accountDevicePO);
         // 重簽回傳下載url
-        
+
         // 組plist
         // FIXME: 2019/12/14 需拿重簽過後的ipaLink
         String plist = plistTemplate
