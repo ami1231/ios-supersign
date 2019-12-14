@@ -22,6 +22,7 @@ public class IosUrlUtils {
      */
     public static String getRedirectIpaViewUrl(String udidDownloadUrl , String ipaId ,String udid){
         return udidDownloadUrl+"/udid/app/ipa/"+ipaId+"?udid="+udid;
+        //return "itms-services://?action=download-manifest&url="+udidDownloadUrl+"/udid/app/ipa/"+ipaId+"?udid="+udid;
     }
 
     /**
@@ -34,4 +35,7 @@ public class IosUrlUtils {
         return downloadUrl+"/ipa/signature.ipa";
     }
 
+    public static String getUdidViewUrl(String ipaDownloadUrl, String ipaDownloadId) {
+        return ipaDownloadUrl+"/udid/download/view/"+ipaDownloadId;
+    }
 }

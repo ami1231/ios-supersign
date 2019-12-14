@@ -97,6 +97,8 @@ public class UDIDBSServiceImpl implements UDIDBSService {
                 isBindSuccess = true;
                 break;
             }
+        }else{
+            isBindSuccess = true;
         }
         return isBindSuccess;
     }

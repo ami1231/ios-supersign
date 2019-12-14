@@ -4,7 +4,6 @@ import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.plist.PlistBService;
 import com.naoh.iossupersign.utils.IosUrlUtils;
-import com.naoh.iossupersign.utils.IosUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

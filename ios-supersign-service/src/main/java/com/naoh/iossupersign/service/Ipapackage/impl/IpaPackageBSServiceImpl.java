@@ -16,6 +16,7 @@ import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.file.FileService;
 import com.naoh.iossupersign.utils.FileUtils;
+import com.naoh.iossupersign.utils.IosUrlUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -118,7 +119,7 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
 
         if(!CollectionUtils.isEmpty(page.getRecords())){
             page.getRecords().forEach(packagePO -> {
-                packagePO.setDownloadUrl(ipaDownloadUrl+"/udid/app/index/"+packagePO.getIpaDownloadId());
+                packagePO.setDownloadUrl(IosUrlUtils.getUdidViewUrl(ipaDownloadUrl,packagePO.getIpaDownloadId()));
             });
         }
         return page;

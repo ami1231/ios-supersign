@@ -63,7 +63,8 @@
 				<strong>[[${appName}]]</strong>
 				<div class="clr">
 					<a class="arouse" href=""><b>?</b>安装教程</a>
-					<a class="btn btn-mini step2 blue" th:href="@{'/udid/download/'+${ipaId}}" id="install_btn">免费安装</a>
+					<a class="btn btn-mini step3" style="float: left;" id="downloading"><span>正在打包</span><em></em></a><div class="loader"></div>
+					<a id="downloading_cmp" class="btn btn-mini step4 " th:href="@{plistPath}" style="display: none ">点击下载</a>
 				</div>
 			</div>
 		</div>
@@ -230,28 +231,5 @@
 	<script type="text/javascript" th:src="@{/download/js/download.js}"></script>
 	<script type="text/javascript" th:src="@{/download/js/swiper.min.js}"></script>
 	<script type="text/javascript" th:src="@{/download/js/clipboard.min.js}"></script>
-	<script type="text/javascript" th:inline="javascript">
-		$(function () {
-			function auto_download() {
-				var err = "0"
-				var d = "1"
-				if (d != "1" || err == "1") {
-					return
-				}
-				var issafariBrowser = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
-				var ipaId =  [[${ipaId}]];
-				if (true) {
-					location = '/udid/download/'+ipaId
-					if ("" != "1") {
-						return
-					}
-					setTimeout(function () {
-						location.href = 'https://mdmweb.haokanman.com/embedded.mobileprovision'
-					}, 1 * 3000)
-				}
-			}
-			auto_download()
-		})
-	</script>
 	</body>
 </html>

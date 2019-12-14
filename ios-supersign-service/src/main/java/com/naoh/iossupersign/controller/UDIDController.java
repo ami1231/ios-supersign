@@ -57,13 +57,13 @@ public class UDIDController {
     }
 
 
-    @GetMapping("/app/udid/{ipaId}")
+    @GetMapping("/download/view/{ipaId}")
     public String toMobileConfigView(@PathVariable String ipaId , Model model)  {
         IpaPackagePO ipaPackagePO = getIpa(ipaId);
         model.addAttribute("iconPath",udidDownloadUrl+ipaPackagePO.getIcon());
         model.addAttribute("appName",ipaPackagePO.getName());
         model.addAttribute("ipaId",ipaId);
-        return "appdownload/udiddownload";
+        return "appdownload/udidownload";
     }
 
 
@@ -81,6 +81,7 @@ public class UDIDController {
     @PostMapping("/getUDID/{ipaId}")
     public void getUDID(@PathVariable String ipaId,HttpServletRequest request ,HttpServletResponse response){
         try {
+            response.setContentType("text/html;charset=UTF-8");
             //获取HTTP请求的输入流
             InputStream is = request.getInputStream();
             //已HTTP请求输入流建立一个BufferedReader对象
@@ -96,7 +97,10 @@ public class UDIDController {
             String udid = (String) parse.get("UDID").toJavaObject();
             Boolean isSuccess = udidbsService.bindUdidToAppleAccount(udid);
             if(isSuccess){
+                System.out.println(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
                 response.sendRedirect(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
+                response.setStatus(301);
+                response.setHeader("Location",IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
             }
          } catch (Exception e) {
             e.printStackTrace();
