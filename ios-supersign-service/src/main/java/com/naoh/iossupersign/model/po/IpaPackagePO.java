@@ -56,4 +56,6 @@ public class IpaPackagePO implements Serializable {
     @ApiModelProperty(value = "user下載資源位置")
     private String ipaDownloadId;
 
+    private String downloadUrl;
+
 }

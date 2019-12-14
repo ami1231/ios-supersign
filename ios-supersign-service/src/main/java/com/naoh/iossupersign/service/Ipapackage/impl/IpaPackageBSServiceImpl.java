@@ -18,13 +18,16 @@ import com.naoh.iossupersign.service.file.FileService;
 import com.naoh.iossupersign.utils.FileUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -44,6 +47,9 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
     private final IpaPackageService ipaPackageService;
 
     private final FileService fileService;
+
+    @Value("${ipa.download.url}")
+    private String ipaDownloadUrl;
 
     @Autowired
     public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService, FileService fileService) {
@@ -108,8 +114,14 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         Page<IpaPackagePO> page = new Page<>();
         page.setCurrent(currentPage.longValue());
         page.setSize(DEFAULT_PAGE_SIZE);
+        page = ipaPackageService.getIpaPackagePage(page, name);
 
-        return ipaPackageService.getIpaPackagePage(page, name);
+        if(!CollectionUtils.isEmpty(page.getRecords())){
+            page.getRecords().forEach(packagePO -> {
+                packagePO.setDownloadUrl(ipaDownloadUrl+"/udid/app/index/"+packagePO.getIpaDownloadId());
+            });
+        }
+        return page;
     }
 
     @Override

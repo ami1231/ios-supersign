@@ -12,6 +12,7 @@ import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -33,17 +34,23 @@ public class UDIDBSServiceImpl implements UDIDBSService {
 
     private Integer deviceLimit = 100;
 
-    @Autowired
-    private RedisCache redisCache;
+    private final RedisCache redisCache;
 
-    @Autowired
-    private AppleAccountBSService appleAccountBSService;
+    private final AppleAccountBSService appleAccountBSService;
 
-    @Autowired
-    private  AppleApiService appleApiService;
+    private final AppleApiService appleApiService;
 
-    @Autowired
-    private DeviceBSService deviceBSService;
+    private final DeviceBSService deviceBSService;
+
+    @Value("${ipa.download.udid-url}")
+    private String udidownloadurl;
+
+    public UDIDBSServiceImpl(RedisCache redisCache, AppleAccountBSService appleAccountBSService, AppleApiService appleApiService, DeviceBSService deviceBSService) {
+        this.redisCache = redisCache;
+        this.appleAccountBSService = appleAccountBSService;
+        this.appleApiService = appleApiService;
+        this.deviceBSService = deviceBSService;
+    }
 
     @PostConstruct
     public void initUDIDTemplate() throws URISyntaxException, IOException {
@@ -51,9 +58,10 @@ public class UDIDBSServiceImpl implements UDIDBSService {
     }
 
     @Override
-    public String getMobileConfig(){
+    public String getMobileConfig(String ipaId){
         UdidBO udidBO =  UdidBO.builder().payloadUUID(UUID.randomUUID().toString()).build();
         String nowUdidTemplate = udidTemplate
+                .replace("@@getUDIDURL",udidownloadurl+"/udid/getUDID/"+ipaId)
                 .replace("@@PayloadOrganization", Objects.toString(udidBO.getPayloadOrganization(),""))
                 .replace("@@PayloadDisplayName",Objects.toString(udidBO.getPayloadDisplayName(),""))
                 .replace("@@PayloadUUID",udidBO.getPayloadUUID());

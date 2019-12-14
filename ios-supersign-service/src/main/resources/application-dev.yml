@@ -32,5 +32,5 @@ fileUploadPath: ipa/
 
 ipa:
   download:
-    url: abc.com
-    udid-url:  abc.com
+    url: https://bebfd6a8.ngrok.io
+    udid-url:  https://bebfd6a8.ngrok.io

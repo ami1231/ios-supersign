@@ -3,7 +3,10 @@ package com.naoh.iossupersign.service.plist.impl;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.plist.PlistBService;
+import com.naoh.iossupersign.utils.IosUrlUtils;
+import com.naoh.iossupersign.utils.IosUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +28,9 @@ public class PlistBSServiceImpl implements PlistBService {
     private String plistTemplate;
 
     private final IpaPackageBSService ipaPackageBSService;
+
+    @Value("${ipa.download.url}")
+    private String ipaDownloadUrl;
 
     @Autowired
     public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService) {
@@ -50,7 +56,7 @@ public class PlistBSServiceImpl implements PlistBService {
         // FIXME: 2019/12/14 需拿重簽過後的ipaLink
         String plist = plistTemplate
 //                .replace("@@IpaLink", Objects.toString(ipaPackagePO.getLink(),""))
-                .replace("@@IpaLink", "https://036c3a38.ngrok.io/ipa/signature.ipa")
+                .replace("@@IpaLink", IosUrlUtils.getIpaUrl(ipaDownloadUrl))
                 .replace("@@BundleIdentifier", Objects.toString(ipaPackagePO.getBundleIdentifier(),""))
                 .replace("@@BundleVersion", Objects.toString(ipaPackagePO.getBuildVersion(),""))
                 .replace("@@Name", Objects.toString(ipaPackagePO.getName(),""));

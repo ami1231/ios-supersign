@@ -5,6 +5,7 @@ import com.dd.plist.PropertyListParser;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
+import com.naoh.iossupersign.utils.IosUrlUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -25,6 +26,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Peter.Hong
@@ -42,8 +45,10 @@ public class UDIDController {
 
     private final IpaPackageService ipaPackageService;
 
-    @Value("ipa.download.udid-url")
-    private String udidownloadurl;
+    private Map<String , IpaPackagePO> ipaPackageMap = new HashMap();
+
+    @Value("${ipa.download.udid-url}")
+    private String udidDownloadUrl;
 
     public UDIDController(ServletContext context, UDIDBSService udidbsService, IpaPackageService ipaPackageService) {
         this.context = context;
@@ -51,24 +56,20 @@ public class UDIDController {
         this.ipaPackageService = ipaPackageService;
     }
 
-    @GetMapping("index")
-    public String index(){
-        return "";
-    }
 
-    @GetMapping("/app/index/{ipaid}")
-    public String downloadMobileConfig(@PathVariable String ipaId , Model model)  {
-        IpaPackagePO ipaPackagePO = ipaPackageService.selectByDownloadId(ipaId);
-        model.addAttribute("iconPath",udidownloadurl+ipaPackagePO.getIcon());
+    @GetMapping("/app/udid/{ipaId}")
+    public String toMobileConfigView(@PathVariable String ipaId , Model model)  {
+        IpaPackagePO ipaPackagePO = getIpa(ipaId);
+        model.addAttribute("iconPath",udidDownloadUrl+ipaPackagePO.getIcon());
         model.addAttribute("appName",ipaPackagePO.getName());
         model.addAttribute("ipaId",ipaId);
-        return "appdownload/ipadownload";
+        return "appdownload/udiddownload";
     }
 
 
-    @GetMapping("/download/{ipaid}")
+    @GetMapping("/download/{ipaId}")
     public ResponseEntity<byte[]> downloadMobileConfig(@PathVariable String ipaId) throws IOException {
-        String mobileConfig = udidbsService.getMobileConfig();
+        String mobileConfig = udidbsService.getMobileConfig(ipaId);
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.setContentLength(mobileConfig.getBytes().length);
         respHeaders.setContentType(MediaType.asMediaType(MimeType.valueOf("application/x-apple-aspen-config")));
@@ -77,10 +78,9 @@ public class UDIDController {
         return new ResponseEntity<byte[]>(mobileConfig.getBytes(), respHeaders, HttpStatus.OK);
     }
 
-    @PostMapping("/getUDID")
-    public void getUDID(HttpServletRequest request ,HttpServletResponse response){
+    @PostMapping("/getUDID/{ipaId}")
+    public void getUDID(@PathVariable String ipaId,HttpServletRequest request ,HttpServletResponse response){
         try {
-            request.setCharacterEncoding("UTF-8");
             //获取HTTP请求的输入流
             InputStream is = request.getInputStream();
             //已HTTP请求输入流建立一个BufferedReader对象
@@ -95,12 +95,35 @@ public class UDIDController {
             NSDictionary parse = (NSDictionary) PropertyListParser.parse(xml.getBytes());
             String udid = (String) parse.get("UDID").toJavaObject();
             Boolean isSuccess = udidbsService.bindUdidToAppleAccount(udid);
-
-            //TODO 导出IPA下载画面
-
-        } catch (Exception e) {
+            if(isSuccess){
+                response.sendRedirect(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
+            }
+         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+    @GetMapping("/app/ipa/{ipaId}")
+    public String toIpaView(@PathVariable String ipaId,String udid , Model model){
+        try {
+            IpaPackagePO ipaPackagePO = getIpa(ipaId);
+            model.addAttribute("iconPath",udidDownloadUrl+ipaPackagePO.getIcon());
+            model.addAttribute("appName",ipaPackagePO.getName());
+            model.addAttribute("ipaId",ipaId);
+            model.addAttribute("udid",udid);
+            model.addAttribute("plistPath",IosUrlUtils.getItemServiceUrl(udidDownloadUrl,ipaId,udid));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "appdownload/ipadownload";
+    }
 
+    private IpaPackagePO getIpa(String ipaId){
+        IpaPackagePO ipaPackagePO = null;
+        if(ipaPackageMap.get(ipaId)==null){
+            ipaPackagePO = ipaPackageService.selectByDownloadId(ipaId);
+        }else{
+            ipaPackagePO = ipaPackageMap.get(ipaId);
+        }
+        return ipaPackagePO;
+    }
 }

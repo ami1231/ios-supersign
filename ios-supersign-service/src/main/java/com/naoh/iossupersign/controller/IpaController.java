@@ -10,6 +10,7 @@ import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -87,7 +88,6 @@ public class IpaController {
     public String search(@RequestParam(value = "page") Integer currentPage, String name, Model model){
 
         Page<IpaPackagePO> page = ipaPackageBSService.selectIpaByName(currentPage, name);
-
         model.addAttribute("page", page);
         model.addAttribute("name", name);
 

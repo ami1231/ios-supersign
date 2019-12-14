@@ -32,10 +32,6 @@ spring:
       enabled: true
       force: true
       charset: utf-8
-  servlet:
-    multipart:
-      location: /Users/hongyi/Desktop/data
-      enabled: true
 management:
   health:
     redis:

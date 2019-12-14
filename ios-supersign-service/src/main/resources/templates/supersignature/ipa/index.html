@@ -29,9 +29,9 @@
 					<table class="table table-bordered mt-15">
 						<thead>
 							<tr>
-								<th>ID</th>
 								<th>包名</th>
 								<th>安装包ID</th>
+								<th>下载地址</th>
 								<th>版本</th>
 								<th>修改时间</th>
 								<th>设备量</th>
@@ -43,9 +43,9 @@
 								<td colspan="7" style="text-align: center;">查无数据</td>
 							</tr>
 							<tr th:unless="${#lists.isEmpty(page.getRecords())}" class="indexData" th:each="item : ${page.getRecords()}" th:id="'dataTr' + ${item.id}">
-								<td width="20%">[[${item.id}]]</td>
 								<td width="20%">[[${item.name}]]</td>
 								<td width="20%">[[${item.bundleIdentifier}]]</td>
+								<td width="20%">[[${item.downloadUrl}]]</td>
 								<td width="20%">[[${item.buildVersion}]]</td>
 								<td width="20%">[[${#temporals.format(item.updateTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
 								<td width="20%">[[${item.count}]]</td>
