@@ -13,5 +13,7 @@ public interface FileService {
 
     boolean deleteFileIfExit(String pathName) throws IOException;
 
-    String uploadFile(byte[] bytes, String pathname) throws IOException;
+    String uploadFile(byte[] bytes, String pathName) throws IOException;
+
+    File base64ToFile(String base64, String pathName);
 }

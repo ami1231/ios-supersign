@@ -31,6 +31,7 @@ debug: true
 file:
   ipaUploadPath: ipa/
   p12UploadPath: p12/
+  profileUploadPath: profile/
 
 ipa:
   download:

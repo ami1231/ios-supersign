@@ -1,8 +1,11 @@
 package com.naoh.iossupersign.service.plist.impl;
 
+import com.naoh.iossupersign.model.po.AccountDevicePO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
+import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.service.plist.PlistBService;
+import com.naoh.iossupersign.service.profile.ProfileBSService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,9 +29,15 @@ public class PlistBSServiceImpl implements PlistBService {
 
     private final IpaPackageBSService ipaPackageBSService;
 
+    private final DeviceBSService deviceBSService;
+
+    private final ProfileBSService profileBSService;
+
     @Autowired
-    public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService) {
+    public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService, DeviceBSService deviceBSService, ProfileBSService profileBSService) {
         this.ipaPackageBSService = ipaPackageBSService;
+        this.deviceBSService = deviceBSService;
+        this.profileBSService = profileBSService;
     }
 
     @PostConstruct
@@ -43,9 +52,12 @@ public class PlistBSServiceImpl implements PlistBService {
         IpaPackagePO ipaPackagePO = ipaPackageBSService.selectIpaByDownloadId(downloadId);
 
         // 利用udid拿取appleAccount資訊
+        AccountDevicePO accountDevicePO = deviceBSService.getAccountDeviceByUdid(udid);
 
+        // 拿取新的profile(重簽需要)
+        String profilePath = profileBSService.createNewProfile(accountDevicePO);
         // 重簽回傳下載url
-
+        
         // 組plist
         // FIXME: 2019/12/14 需拿重簽過後的ipaLink
         String plist = plistTemplate
