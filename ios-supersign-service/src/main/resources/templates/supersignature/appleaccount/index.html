@@ -19,6 +19,8 @@
 							<th>苹果账号</th>
 							<th>已用设备</th>
 							<th>添加时间</th>
+							<th>p12文件</th>
+							<th>操作</th>
 						</tr>
 					</thead>
 					<tbody id="sortable">
@@ -29,6 +31,10 @@
 						<td width="20%">[[${item.account}]]</td>
 						<td width="20%">[[${item.count}]]/100</td>
 						<td width="20%">[[${#temporals.format(item.createTime, 'yyyy-MM-dd HH:mm:ss')}]]</td>
+						<td width="20%" th:text="${item.p12} ?'已上传':'未上传' "></td>
+						<td width="20%">
+							<a href="javascript:void(0);" class="btn btn-primary btn-xs btn-t edit-show" th:data-id="${item.account}" onclick="showEditModal(this)">上传P12</a>
+						</td>
 					</tr>
 					</tbody>
 				</table>
@@ -97,6 +103,39 @@
                 <!-- /.modal-dialog -->
             </div>
             <!-- /.modal -->
+
+			<!-- Modal -->
+			<div class="modal fade" id="myModalP12Add" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+							<h4 class="modal-title">上传P12</h4>
+						</div>
+						<input id="p12Account" type="hidden" name="p12Account">
+						<div class="modal-body">
+							<form id="addIpaForm">
+								<div class="row ml-12 mt-5">
+									<div class="col-md-3 custom-label" >
+										<span style="color: red; ">*  </span>P12:
+									</div>
+									<div class="col-md-9">
+										<input id="file" type="file" name="file" class="form-control" >
+									</div>
+								</div>
+							</form>
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+							<button type="button" id="addIpaBtn" class="btn btn-primary" onclick="upload()">上传</button>
+						</div>
+					</div>
+					<!-- /.modal-content -->
+				</div>
+				<!-- /.modal-dialog -->
+			</div>
+			<!-- /.modal -->
+
 		</div>
 	</body>
 	<div layout:fragment="contentJs">
@@ -129,13 +168,42 @@
 				});
 			}
 
-			function pagination(page) {
-				$("#page").val(page);
-			}
-
 			function pagination(page){
 				$("#pageNo").val(page);
 				$("#search").submit();
+			}
+
+            function showEditModal(element){
+                $("#myModalP12Add").modal("show");
+                $("#p12Account").val($(element).attr("data-id"));
+            }
+
+            function upload(){
+                var formData = new FormData();  //建構new FormData()
+                var fileData = $("input[name=file]")[0].files[0];   //取得上傳檔案屬性
+
+                var account = $("#p12Account").val();
+
+                formData.append('p12', fileData);  //吧物件加到file後面
+                formData.append('account', account);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/appleAccount/uploadP12",
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    cache: false,
+                    success: function(data)
+                    {
+                        if("200" == data.code){
+                            myToast(data.msg);
+                            location.reload();
+                        }else{
+                            myToastError(data.msg);
+                        }
+                    }
+                });
 			}
 
 		</script>

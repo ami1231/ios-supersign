@@ -20,7 +20,7 @@ import java.nio.file.Paths;
 @Slf4j
 public class FileServiceImpl implements FileService {
 
-    @Value("${fileUploadPath}")
+    @Value("${file.ipaUploadPath}")
     private String fileUploadPath;
 
     public String uploadFile(File file) throws IOException {
@@ -29,6 +29,12 @@ public class FileServiceImpl implements FileService {
         Path path = Paths.get(pathname);
         Files.write(path, bytes);
         return pathname;
+    }
+
+    public String uploadFile(byte[] bytes, String pathname) throws IOException {
+        Path path = Paths.get(pathname);
+        Files.write(path, bytes);
+        return  pathname;
     }
 
     public boolean deleteFileIfExit(String pathName) throws IOException {

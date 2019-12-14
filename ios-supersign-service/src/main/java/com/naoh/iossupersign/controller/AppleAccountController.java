@@ -4,13 +4,16 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.naoh.iossupersign.base.ApiResult;
 import com.naoh.iossupersign.enums.ServiceError;
 import com.naoh.iossupersign.exception.ServiceException;
+import com.naoh.iossupersign.model.bo.IpaPackageBO;
 import com.naoh.iossupersign.model.po.AppleAccountPO;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author Peter.Hong
@@ -66,6 +69,24 @@ public class AppleAccountController {
         model.addAttribute("page", appleAccountPOS);
         model.addAttribute("accounts", appleAccountPOS.getRecords());
         return "supersignature/appleaccount/index";
+    }
+
+    @ApiOperation(value = "/uploadP12", notes = "上传p12", produces = MediaType.APPLICATION_JSON_VALUE, consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @ResponseBody
+    @PostMapping(value = "/uploadP12")
+    public ApiResult<String> uploadPackage(@RequestPart(value = "p12")MultipartFile file, @RequestParam("account")String account) {
+        ApiResult<String> result = new ApiResult<>();
+        try {
+
+            appleAccountBSService.uploadP12(file, account);
+
+            result.setCode(ApiResult.SUCCESS_CODE);
+            result.setMsg(ApiResult.SUCCESS_MSG);
+
+        }catch (ServiceException e){
+            result.setMsg(e.getErrorMsg());
+        }
+        return result;
     }
 
 }
