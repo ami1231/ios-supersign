@@ -2,41 +2,67 @@ package com.naoh.iossupersign.controller;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.naoh.iossupersign.model.po.IpaPackagePO;
+import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.MimeType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 /**
  * @author Peter.Hong
  * @date 2019/12/10
  */
 @Controller
-@RequestMapping("mobileconfig")
+@RequestMapping("udid")
 public class UDIDController {
 
-    @Autowired
-    private ServletContext context;
+    private final ServletContext context;
 
-    @Autowired
-    private UDIDBSService udidbsService;
+    private final UDIDBSService udidbsService;
 
     private static final int BUFFER_SIZE = 4096;
 
-    @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadMobileConfig(HttpServletRequest req , HttpServletResponse res) throws IOException {
+    private final IpaPackageService ipaPackageService;
+
+    @Value("ipa.download.udid-url")
+    private String udidownloadurl;
+
+    public UDIDController(ServletContext context, UDIDBSService udidbsService, IpaPackageService ipaPackageService) {
+        this.context = context;
+        this.udidbsService = udidbsService;
+        this.ipaPackageService = ipaPackageService;
+    }
+
+    @GetMapping("/app/index/{ipaid}")
+    public String downloadMobileConfig(@PathVariable String ipaId , Model model)  {
+        IpaPackagePO ipaPackagePO = ipaPackageService.selectByDownloadId(ipaId);
+        model.addAttribute("iconPath",ipaPackagePO.getIcon());
+        model.addAttribute("appName",ipaPackagePO.getName());
+        return "";
+    }
+
+
+    @GetMapping("/download/{ipaid}")
+    public ResponseEntity<byte[]> downloadMobileConfig(@PathVariable String ipaId) throws IOException {
         String mobileConfig = udidbsService.getMobileConfig();
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.setContentLength(mobileConfig.getBytes().length);

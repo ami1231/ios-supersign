@@ -29,3 +29,8 @@ server:
 debug: true
 
 fileUploadPath: ipa/
+
+ipa:
+  download:
+    url: abc.com
+    udid-url:  abc.com
