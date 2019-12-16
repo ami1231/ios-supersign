@@ -142,7 +142,6 @@ public class AppleAccountBSServiceImpl implements AppleAccountBSService {
         String filePath = fileUploadPath+UUID.randomUUID().toString()+".p12";
 
         try{
-            // TODO: 2019/12/14 上傳地址需確認
             fileService.uploadFile(p12File.getBytes(), filePath);
             appleAccountService.updateAccountP12Path(account, filePath);
         }catch (Exception e){

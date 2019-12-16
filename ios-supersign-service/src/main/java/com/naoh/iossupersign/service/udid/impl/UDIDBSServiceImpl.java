@@ -2,6 +2,7 @@ package com.naoh.iossupersign.service.udid.impl;
 
 import cn.hutool.core.io.file.FileWriter;
 import com.naoh.iossupersign.cache.RedisCache;
+import com.naoh.iossupersign.config.DomainConfig;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
 import com.naoh.iossupersign.model.bo.UdidBO;
 import com.naoh.iossupersign.model.dto.AppleResultDTO;
@@ -12,6 +13,8 @@ import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
 import com.naoh.iossupersign.service.device.DeviceBSService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
+import com.naoh.iossupersign.utils.IosUrlUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -43,14 +46,14 @@ public class UDIDBSServiceImpl implements UDIDBSService {
 
     private final DeviceBSService deviceBSService;
 
-    @Value("${ipa.download.udid-url}")
-    private String udidownloadurl;
+    private final DomainConfig domainConfig;
 
-    public UDIDBSServiceImpl(RedisCache redisCache, AppleAccountBSService appleAccountBSService, AppleApiService appleApiService, DeviceBSService deviceBSService) {
+    public UDIDBSServiceImpl(RedisCache redisCache, AppleAccountBSService appleAccountBSService, AppleApiService appleApiService, DeviceBSService deviceBSService, DomainConfig domainConfig) {
         this.redisCache = redisCache;
         this.appleAccountBSService = appleAccountBSService;
         this.appleApiService = appleApiService;
         this.deviceBSService = deviceBSService;
+        this.domainConfig = domainConfig;
     }
 
     @PostConstruct
@@ -63,7 +66,7 @@ public class UDIDBSServiceImpl implements UDIDBSService {
         UdidBO udidBO =  UdidBO.builder().payloadDisplayName(ipaPackagePO.getSummary())
                 .payloadUUID(UUID.randomUUID().toString()).build();
         String nowUdidTemplate = udidTemplate
-                .replace("@@getUDIDURL",udidownloadurl+"/udid/getUDID/"+ipaPackagePO.getIpaDownloadId())
+                .replace("@@getUDIDURL", IosUrlUtils.getUDIDUrl(domainConfig.getMobileConfigUrlPath(),"/udid/getUDID/",ipaPackagePO.getIpaDownloadId()))
                 .replace("@@PayloadDisplayName",Objects.toString(udidBO.getPayloadDisplayName(),udidBO.getPayloadDisplayName()))
                 .replace("@@PayloadUUID",udidBO.getPayloadUUID());
         URL url = this.getClass().getClassLoader().getResource("sh");

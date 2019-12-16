@@ -16,8 +16,11 @@ import java.util.List;
 @RequestMapping("/member")
 public class MemberController {
 
-	@Autowired
-	private MemberBSService memberBSService;
+	private final MemberBSService memberBSService;
+
+	public MemberController(MemberBSService memberBSService) {
+		this.memberBSService = memberBSService;
+	}
 
 	@RequestMapping("/index")
 	public String index(MemberPO memberPO, Model model) {

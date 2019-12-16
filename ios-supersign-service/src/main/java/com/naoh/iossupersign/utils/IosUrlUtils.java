@@ -37,4 +37,8 @@ public class IosUrlUtils {
     public static String getUdidViewUrl(String ipaDownloadUrl, String ipaDownloadId) {
         return ipaDownloadUrl+"/udid/download/view/"+ipaDownloadId;
     }
+
+    public static CharSequence getUDIDUrl(String mobileConfigUrlPath, String s, String ipaDownloadId) {
+        return mobileConfigUrlPath+"/udid/getUDID/"+ipaDownloadId;
+    }
 }

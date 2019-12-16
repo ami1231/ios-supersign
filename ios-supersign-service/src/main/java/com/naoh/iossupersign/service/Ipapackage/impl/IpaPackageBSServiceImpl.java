@@ -8,6 +8,7 @@ import cn.hutool.crypto.digest.MD5;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.naoh.iossupersign.config.DomainConfig;
 import com.naoh.iossupersign.enums.ServiceError;
 import com.naoh.iossupersign.exception.ServiceException;
 import com.naoh.iossupersign.model.bo.IpaPackageBO;
@@ -49,13 +50,13 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
 
     private final FileService fileService;
 
-    @Value("${ipa.download.url}")
-    private String ipaDownloadUrl;
+    private final DomainConfig domainConfig;
 
     @Autowired
-    public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService, FileService fileService) {
+    public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService, FileService fileService, DomainConfig domainConfig) {
         this.ipaPackageService = ipaPackageService;
         this.fileService = fileService;
+        this.domainConfig = domainConfig;
     }
 
     @Override
@@ -119,7 +120,7 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
 
         if(!CollectionUtils.isEmpty(page.getRecords())){
             page.getRecords().forEach(packagePO -> {
-                packagePO.setDownloadUrl(IosUrlUtils.getUdidViewUrl(ipaDownloadUrl,packagePO.getIpaDownloadId()));
+                packagePO.setDownloadUrl(IosUrlUtils.getUdidViewUrl(domainConfig.getIpaUrlPath(),packagePO.getIpaDownloadId()));
             });
         }
         return page;

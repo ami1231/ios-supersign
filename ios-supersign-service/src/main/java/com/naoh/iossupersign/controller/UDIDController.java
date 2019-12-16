@@ -2,10 +2,12 @@ package com.naoh.iossupersign.controller;
 
 import com.dd.plist.NSDictionary;
 import com.dd.plist.PropertyListParser;
+import com.naoh.iossupersign.config.DomainConfig;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
 import com.naoh.iossupersign.utils.IosUrlUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -47,20 +49,20 @@ public class UDIDController {
 
     private Map<String , IpaPackagePO> ipaPackageMap = new HashMap();
 
-    @Value("${ipa.download.udid-url}")
-    private String udidDownloadUrl;
+    private final DomainConfig domainConfig;
 
-    public UDIDController(ServletContext context, UDIDBSService udidbsService, IpaPackageService ipaPackageService) {
+    public UDIDController(ServletContext context, UDIDBSService udidbsService, IpaPackageService ipaPackageService, DomainConfig domainConfig) {
         this.context = context;
         this.udidbsService = udidbsService;
         this.ipaPackageService = ipaPackageService;
+        this.domainConfig = domainConfig;
     }
 
 
     @GetMapping("/download/view/{ipaId}")
     public String toMobileConfigView(@PathVariable String ipaId , Model model)  {
         IpaPackagePO ipaPackagePO = getIpa(ipaId);
-        model.addAttribute("iconPath",udidDownloadUrl+ipaPackagePO.getIcon());
+        model.addAttribute("iconPath",domainConfig.getMobileConfigUrlPath()+ipaPackagePO.getIcon());
         model.addAttribute("appName",ipaPackagePO.getName());
         model.addAttribute("ipaId",ipaId);
         return "appdownload/udidownload";
@@ -97,10 +99,10 @@ public class UDIDController {
             String udid = (String) parse.get("UDID").toJavaObject();
             Boolean isSuccess = udidbsService.bindUdidToAppleAccount(udid);
             if(isSuccess){
-                System.out.println(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
+                System.out.println(IosUrlUtils.getRedirectIpaViewUrl(domainConfig.getMobileConfigUrlPath(),ipaId,udid));
 //                response.sendRedirect(IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
                 response.setStatus(301);
-                response.setHeader("Location",IosUrlUtils.getRedirectIpaViewUrl(udidDownloadUrl,ipaId,udid));
+                response.setHeader("Location",IosUrlUtils.getRedirectIpaViewUrl(domainConfig.getMobileConfigUrlPath(),ipaId,udid));
             }
          } catch (Exception e) {
             e.printStackTrace();
@@ -110,11 +112,11 @@ public class UDIDController {
     public String toIpaView(@PathVariable String ipaId,String udid , Model model){
         try {
             IpaPackagePO ipaPackagePO = getIpa(ipaId);
-            model.addAttribute("iconPath",udidDownloadUrl+ipaPackagePO.getIcon());
+            model.addAttribute("iconPath",domainConfig.getMobileConfigUrlPath()+ipaPackagePO.getIcon());
             model.addAttribute("appName",ipaPackagePO.getName());
             model.addAttribute("ipaId",ipaId);
             model.addAttribute("udid",udid);
-            model.addAttribute("plistPath",IosUrlUtils.getItemServiceUrl(udidDownloadUrl,ipaId,udid));
+            model.addAttribute("plistPath",IosUrlUtils.getItemServiceUrl(domainConfig.getMobileConfigUrlPath(),ipaId,udid));
         } catch (Exception e) {
             e.printStackTrace();
         }

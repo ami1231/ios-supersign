@@ -14,8 +14,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class IpaPackageServiceImpl implements IpaPackageService {
 
-    @Autowired
-    private IpaPackageMapper ipaPackageMapper;
+    private final IpaPackageMapper ipaPackageMapper;
+
+    public IpaPackageServiceImpl(IpaPackageMapper ipaPackageMapper) {
+        this.ipaPackageMapper = ipaPackageMapper;
+    }
 
     @Override
     public int insertIpaPackage(IpaPackagePO ipaPackagePO) {
