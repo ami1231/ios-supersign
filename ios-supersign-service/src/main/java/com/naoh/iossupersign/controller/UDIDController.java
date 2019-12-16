@@ -69,7 +69,7 @@ public class UDIDController {
 
     @GetMapping("/download/{ipaId}")
     public ResponseEntity<byte[]> downloadMobileConfig(@PathVariable String ipaId) throws IOException {
-        String mobileConfig = udidbsService.getMobileConfig(ipaId);
+        String mobileConfig = udidbsService.getMobileConfig(getIpa(ipaId));
         HttpHeaders respHeaders = new HttpHeaders();
         respHeaders.setContentLength(mobileConfig.getBytes().length);
         respHeaders.setContentType(MediaType.asMediaType(MimeType.valueOf("application/x-apple-aspen-config")));
