@@ -9,7 +9,7 @@ import java.io.IOException;
  */
 public interface FileService {
 
-    String uploadFile(File file) throws IOException;
+    String uploadFile(File file, String pathname) throws IOException;
 
     boolean deleteFileIfExit(String pathName) throws IOException;
 

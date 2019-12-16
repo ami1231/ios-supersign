@@ -16,6 +16,7 @@ import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageService;
 import com.naoh.iossupersign.service.file.FileService;
+import com.naoh.iossupersign.service.udid.UDIDBSService;
 import com.naoh.iossupersign.utils.FileUtils;
 import com.naoh.iossupersign.utils.IosUrlUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -52,11 +53,17 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
 
     private final DomainConfig domainConfig;
 
+    private final UDIDBSService udidbsService;
+
+    @Value("${file.ipaUploadPath}")
+    private String fileUploadPath;
+
     @Autowired
-    public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService, FileService fileService, DomainConfig domainConfig) {
+    public IpaPackageBSServiceImpl(IpaPackageService ipaPackageService, FileService fileService, DomainConfig domainConfig, UDIDBSService udidbsService) {
         this.ipaPackageService = ipaPackageService;
         this.fileService = fileService;
         this.domainConfig = domainConfig;
+        this.udidbsService = udidbsService;
     }
 
     @Override
@@ -83,12 +90,12 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
                     if(Objects.nonNull(originIpaPO)){
                         // 相同 BundleId update
                         ipaPackageService.updateIpaPackage(newIpaPackagePO);
+
                     }else{
                         ipaPackageService.insertIpaPackage(newIpaPackagePO);
                     }
-
-
                 }
+                udidbsService.uploadMobileConfig(newIpaPackagePO);
 
             } catch (Exception e) {
                 // 解析失敗
@@ -149,13 +156,15 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
         String miniVersion = parse.get("MinimumOSVersion").toString();
         String bundleIdentifier = parse.get("CFBundleIdentifier").toString();
 
-        String appLink = fileService.uploadFile(excelFile);
+        String ipaDownloadId = DigestUtils.md5DigestAsHex(bundleIdentifier.getBytes());
+
+        String pathname = fileUploadPath+ ipaDownloadId+".ipa";
+        String appLink = fileService.uploadFile(excelFile, pathname);
         if (appLink != null) {
             log.info("ipa文件上传完成");
         }
 
-        // 下載包url標示
-        String ipaDownloadId = DigestUtils.md5DigestAsHex(bundleIdentifier.getBytes());
+        String mobileFileName = ipaDownloadId+".mobileconfig";
 
         return IpaPackagePO.builder()
                 .id(ipaPackageBO.getId())
@@ -167,6 +176,7 @@ public class IpaPackageBSServiceImpl implements IpaPackageBSService {
                 .link(appLink)
                 .summary(summary)
                 .ipaDownloadId(ipaDownloadId)
+                .mobileFileName(mobileFileName)
                 .build();
     }
 

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+    <dict>
+        <key>PayloadContent</key>
+        <dict>
+            <key>URL</key>
+            <string>@@getUDIDURL</string>
+            <key>DeviceAttributes</key>
+            <array>
+                <string>SERIAL</string>
+                <string>MAC_ADDRESS_EN0</string>
+                <string>UDID</string>
+                <string>IMEI</string>
+                <string>ICCID</string>
+                <string>VERSION</string>
+                <string>PRODUCT</string>
+            </array>
+        </dict>
+        <key>PayloadDisplayName</key>
+        <string>@@PayloadDisplayName --【点击安装】</string>
+        <key>PayloadVersion</key>
+        <integer>1</integer>
+        <key>PayloadOrganization</key>
+        <string>授权安装进入下一步</string>
+        <key>PayloadUUID</key>
+        <string>@@PayloadUUID</string>
+        <key>PayloadIdentifier</key>
+        <string>online.naoh.profile-service</string>
+        <key>PayloadDescription</key>
+        <string>该配置文件帮助用户进行APP授权安装！This configuration file helps users with APP license installation!</string>
+        <key>PayloadType</key>
+        <string>Profile Service</string>
+    </dict>
+</plist>

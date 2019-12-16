@@ -9,7 +9,6 @@ import com.naoh.iossupersign.service.plist.PlistBService;
 import com.naoh.iossupersign.service.profile.ProfileBSService;
 import com.naoh.iossupersign.utils.IosUrlUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -37,7 +36,6 @@ public class PlistBSServiceImpl implements PlistBService {
     private final ProfileBSService profileBSService;
 
     private final DomainConfig domainConfig;
-
 
     @Autowired
     public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService, DeviceBSService deviceBSService, ProfileBSService profileBSService, DomainConfig domainConfig) {

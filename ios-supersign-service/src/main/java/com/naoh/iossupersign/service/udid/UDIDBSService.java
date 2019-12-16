@@ -10,4 +10,6 @@ public interface UDIDBSService {
     Boolean bindUdidToAppleAccount(String udid);
 
     String getMobileConfig(IpaPackagePO ipaPackagePO);
+
+    String uploadMobileConfig(IpaPackagePO ipaPackagePO);
 }
