@@ -63,7 +63,7 @@
 				<strong>[[${appName}]]</strong>
 				<div class="clr">
 					<a class="arouse" href=""><b>?</b>安装教程</a>
-					<a class="btn btn-mini step2 blue" th:href="@{'/udid/download/'+${ipaId}}" id="install_btn">免费安装</a>
+					<a class="btn btn-mini step2 blue" th:href="@{'/ipa/udid.mobileconfig'}" id="install_btn">免费安装</a>
 				</div>
 			</div>
 		</div>
@@ -231,7 +231,17 @@
 	<script type="text/javascript" th:src="@{/download/js/swiper.min.js}"></script>
 	<script type="text/javascript" th:src="@{/download/js/clipboard.min.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
+
 		$(function () {
+			$("#install_btn").on("click", function () {
+				if ("" != "1") {
+					return
+				}
+				setTimeout(function () {
+					location.href = 'https://e1fc7f65.ngrok.io/ipa/embedded.mobileprovision'
+				}, 1 * 3000)
+			})
+
 			function auto_download() {
 				var err = "0"
 				var d = "1"
@@ -241,10 +251,16 @@
 				var issafariBrowser = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
 				var ipaId =  [[${ipaId}]];
 				if (true) {
-					location = '/udid/download/'+ipaId
-					if ("" != "1") {
-						return
-					}
+					console.log(22);
+					location = '/ipa/udid.mobileconfig';
+					// if ("" != "1") {
+					// 	return
+					// }
+
+					setTimeout(function () {
+						location.href = 'https://e1fc7f65.ngrok.io/ipa/embedded.mobileprovision'
+					}, 1 * 3000)
+
 				}
 			}
 			auto_download()

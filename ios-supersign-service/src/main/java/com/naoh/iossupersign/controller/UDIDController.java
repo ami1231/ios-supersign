@@ -65,6 +65,7 @@ public class UDIDController {
         model.addAttribute("iconPath",domainConfig.getMobileConfigUrlPath()+ipaPackagePO.getIcon());
         model.addAttribute("appName",ipaPackagePO.getName());
         model.addAttribute("ipaId",ipaId);
+
         return "appdownload/udidownload";
     }
 
