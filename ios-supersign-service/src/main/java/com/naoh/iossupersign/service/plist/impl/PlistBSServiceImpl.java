@@ -1,5 +1,6 @@
 package com.naoh.iossupersign.service.plist.impl;
 
+import com.naoh.iossupersign.config.DomainConfig;
 import com.naoh.iossupersign.model.po.AccountDevicePO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.Ipapackage.IpaPackageBSService;
@@ -35,15 +36,15 @@ public class PlistBSServiceImpl implements PlistBService {
 
     private final ProfileBSService profileBSService;
 
-    @Value("${ipa.download.url}")
-    private String ipaDownloadUrl;
+    private final DomainConfig domainConfig;
 
 
     @Autowired
-    public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService, DeviceBSService deviceBSService, ProfileBSService profileBSService) {
+    public PlistBSServiceImpl(IpaPackageBSService ipaPackageBSService, DeviceBSService deviceBSService, ProfileBSService profileBSService, DomainConfig domainConfig) {
         this.ipaPackageBSService = ipaPackageBSService;
         this.deviceBSService = deviceBSService;
         this.profileBSService = profileBSService;
+        this.domainConfig = domainConfig;
     }
 
     @PostConstruct
@@ -68,7 +69,7 @@ public class PlistBSServiceImpl implements PlistBService {
         // FIXME: 2019/12/14 需拿重簽過後的ipaLink
         String plist = plistTemplate
 //                .replace("@@IpaLink", Objects.toString(ipaPackagePO.getLink(),""))
-                .replace("@@IpaLink", IosUrlUtils.getIpaUrl(ipaDownloadUrl))
+                .replace("@@IpaLink", IosUrlUtils.getIpaUrl(domainConfig.getIpaUrlPath()))
                 .replace("@@BundleIdentifier", Objects.toString(ipaPackagePO.getBundleIdentifier(),""))
                 .replace("@@BundleVersion", Objects.toString(ipaPackagePO.getBuildVersion(),""))
                 .replace("@@Name", Objects.toString(ipaPackagePO.getName(),""));
