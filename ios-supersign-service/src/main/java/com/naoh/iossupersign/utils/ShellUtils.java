@@ -20,8 +20,8 @@ public class ShellUtils {
 
       * @return 是否执行成功
       */
-    public static boolean run(String command,String[] env) throws IOException, InterruptedException {
-        Process process = Runtime.getRuntime().exec(command,env);
+    public static boolean run(String command) throws IOException, InterruptedException {
+        Process process = Runtime.getRuntime().exec(command);
         BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
         String line;
         int exitValue = process.waitFor();

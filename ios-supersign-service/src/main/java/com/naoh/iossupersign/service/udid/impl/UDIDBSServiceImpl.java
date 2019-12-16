@@ -1,5 +1,6 @@
 package com.naoh.iossupersign.service.udid.impl;
 
+import cn.hutool.core.io.file.FileWriter;
 import com.naoh.iossupersign.cache.RedisCache;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
 import com.naoh.iossupersign.model.bo.UdidBO;
@@ -18,6 +19,7 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -64,7 +66,12 @@ public class UDIDBSServiceImpl implements UDIDBSService {
                 .replace("@@getUDIDURL",udidownloadurl+"/udid/getUDID/"+ipaPackagePO.getIpaDownloadId())
                 .replace("@@PayloadDisplayName",Objects.toString(udidBO.getPayloadDisplayName(),udidBO.getPayloadDisplayName()))
                 .replace("@@PayloadUUID",udidBO.getPayloadUUID());
-        return nowUdidTemplate;
+        URL url = this.getClass().getClassLoader().getResource("sh");
+
+        String fileName = "temp-udid-"+ipaPackagePO.getIpaDownloadId() + ".mobileconfig";
+        FileWriter writer = new FileWriter(url.getPath()+"/"+fileName);
+        writer.write(nowUdidTemplate);
+        return url.getPath()+fileName;
     }
 
     /**
