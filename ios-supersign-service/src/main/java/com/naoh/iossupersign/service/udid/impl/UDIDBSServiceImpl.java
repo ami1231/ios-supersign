@@ -1,6 +1,5 @@
 package com.naoh.iossupersign.service.udid.impl;
 
-import cn.hutool.core.io.file.FileWriter;
 import com.naoh.iossupersign.cache.RedisCache;
 import com.naoh.iossupersign.config.DomainConfig;
 import com.naoh.iossupersign.model.bo.AuthorizeBO;
@@ -11,9 +10,12 @@ import com.naoh.iossupersign.model.po.DevicePO;
 import com.naoh.iossupersign.model.po.IpaPackagePO;
 import com.naoh.iossupersign.service.appleaccount.AppleAccountBSService;
 import com.naoh.iossupersign.service.device.DeviceBSService;
+import com.naoh.iossupersign.service.file.FileService;
 import com.naoh.iossupersign.service.udid.UDIDBSService;
 import com.naoh.iossupersign.thridparty.appleapi.AppleApiService;
 import com.naoh.iossupersign.utils.IosUrlUtils;
+import com.naoh.iossupersign.utils.ShellUtils;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,6 @@ import javax.annotation.PostConstruct;
 import javax.transaction.Transactional;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
@@ -30,6 +31,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UDIDBSServiceImpl implements UDIDBSService {
 
     private final String mobileConfigPath = "udid.mobileconfig";
@@ -48,12 +50,22 @@ public class UDIDBSServiceImpl implements UDIDBSService {
 
     private final DomainConfig domainConfig;
 
-    public UDIDBSServiceImpl(RedisCache redisCache, AppleAccountBSService appleAccountBSService, AppleApiService appleApiService, DeviceBSService deviceBSService, DomainConfig domainConfig) {
+    private final FileService fileService;
+
+    @Value("${file.mobileconfigUploadPath}")
+    private String mobileconfigUploadPath;
+
+    @Value("${shPath}")
+    private String shPath;
+
+    @Autowired
+    public UDIDBSServiceImpl(RedisCache redisCache, AppleAccountBSService appleAccountBSService, AppleApiService appleApiService, DeviceBSService deviceBSService, DomainConfig domainConfig, FileService fileService) {
         this.redisCache = redisCache;
         this.appleAccountBSService = appleAccountBSService;
         this.appleApiService = appleApiService;
         this.deviceBSService = deviceBSService;
         this.domainConfig = domainConfig;
+        this.fileService = fileService;
     }
 
     @PostConstruct
@@ -69,12 +81,32 @@ public class UDIDBSServiceImpl implements UDIDBSService {
                 .replace("@@getUDIDURL", IosUrlUtils.getUDIDUrl(domainConfig.getMobileConfigUrlPath(),"/udid/getUDID/",ipaPackagePO.getIpaDownloadId()))
                 .replace("@@PayloadDisplayName",Objects.toString(udidBO.getPayloadDisplayName(),udidBO.getPayloadDisplayName()))
                 .replace("@@PayloadUUID",udidBO.getPayloadUUID());
-        URL url = this.getClass().getClassLoader().getResource("sh");
 
         String fileName = "temp-udid-"+ipaPackagePO.getIpaDownloadId() + ".mobileconfig";
-        FileWriter writer = new FileWriter(url.getPath()+"/"+fileName);
-        writer.write(nowUdidTemplate);
-        return url.getPath()+"/"+fileName;
+        String filePath = shPath+fileName;
+        try {
+            fileService.uploadFile(nowUdidTemplate.getBytes(), filePath);
+        } catch (IOException e) {
+            log.error("uploadMobileConfig error", e);
+        }
+
+        return filePath;
+    }
+
+    @Override
+    public String uploadMobileConfig(IpaPackagePO ipaPackagePO) {
+        String path = getMobileConfig(ipaPackagePO);
+        try{
+            String comd = "openssl smime -sign -in $1 -out $2 -signer $3 -certfile $4 -outform der -nodetach";
+            comd=comd.replace("$1", path)
+                    .replace("$2",mobileconfigUploadPath+ipaPackagePO.getMobileFileName())
+                    .replace("$3",shPath+"InnovCertificates.pem")
+                    .replace("$4",shPath+"root.crt.pem");
+            ShellUtils.run(comd);
+        }catch (Exception e){
+            log.error("uploadMobileConfig error", e);
+        }
+        return path;
     }
 
     /**
@@ -111,5 +143,7 @@ public class UDIDBSServiceImpl implements UDIDBSService {
         }
         return isBindSuccess;
     }
+
+
 
 }

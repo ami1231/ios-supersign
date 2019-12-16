@@ -32,6 +32,9 @@ file:
   ipaUploadPath: ipa/
   p12UploadPath: p12/
   profileUploadPath: profile/
+  mobileconfigUploadPath: mobileconfig/
+
+shPath: sh/
 
 url:
   mobileConfig: https://e1fc7f65.ngrok.io

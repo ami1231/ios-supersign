@@ -25,8 +25,7 @@ public class FileServiceImpl implements FileService {
     @Value("${file.ipaUploadPath}")
     private String fileUploadPath;
 
-    public String uploadFile(File file) throws IOException {
-        String pathname = fileUploadPath+file.getName();
+    public String uploadFile(File file, String pathname) throws IOException {
         byte[] bytes = Files.readAllBytes(Paths.get(file.getPath()));
         Path path = Paths.get(pathname);
         Files.write(path, bytes);
