@@ -29,10 +29,12 @@ server:
 debug: true
 
 file:
-  ipaUploadPath: ipa/
+  #ipaUploadPath: ipa/
+  ipaUploadPath: /Users/hongyi/Documents/source/ios-supersign/ios-supersign-service/target/classes/static/ipa/
   p12UploadPath: p12/
   profileUploadPath: profile/
-  mobileconfigUploadPath: mobileconfig/
+  #mobileconfigUploadPath: mobileconfig/
+  mobileconfigUploadPath: /Users/hongyi/Documents/source/ios-supersign/ios-supersign-service/target/classes/static/mobileconfig/
 
 shPath: sh/
 
