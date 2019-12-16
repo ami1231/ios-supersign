@@ -17,18 +17,18 @@
                 <string>PRODUCT</string>
             </array>
         </dict>
+        <key>PayloadOrganization</key>
+        <string>@@PayloadOrganization</string>
         <key>PayloadDisplayName</key>
-        <string>@@PayloadDisplayName --【点击安装】</string>
+        <string>@@PayloadDisplayName</string>
         <key>PayloadVersion</key>
         <integer>1</integer>
-        <key>PayloadOrganization</key>
-        <string>授权安装进入下一步</string>
         <key>PayloadUUID</key>
         <string>@@PayloadUUID</string>
         <key>PayloadIdentifier</key>
         <string>online.naoh.profile-service</string>
         <key>PayloadDescription</key>
-        <string>该配置文件帮助用户进行APP授权安装！This configuration file helps users with APP license installation!</string>
+        <string>本文件仅用来获取设备ID</string>
         <key>PayloadType</key>
         <string>Profile Service</string>
     </dict>
