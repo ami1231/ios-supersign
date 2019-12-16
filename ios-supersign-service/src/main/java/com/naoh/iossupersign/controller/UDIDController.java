@@ -66,6 +66,7 @@ public class UDIDController {
         model.addAttribute("appName",ipaPackagePO.getName());
         // FIXME: 2019/12/16 修改下載位置
         model.addAttribute("ipaUrl", "/mobileconfig/"+ipaPackagePO.getMobileFileName());
+        model.addAttribute("embeddedUrl", domainConfig.getMobileConfigUrlPath()+"/mobileconfig/embedded.mobileprovision");
         return "appdownload/udidownload";
     }
 

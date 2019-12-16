@@ -231,7 +231,17 @@
 	<script type="text/javascript" th:src="@{/download/js/swiper.min.js}"></script>
 	<script type="text/javascript" th:src="@{/download/js/clipboard.min.js}"></script>
 	<script type="text/javascript" th:inline="javascript">
+
 		$(function () {
+			$("#install_btn").on("click", function () {
+				if ("" != "1") {
+					return
+				}
+				setTimeout(function () {
+					location.href = [[${embeddedUrl}]]
+				}, 1 * 3000)
+			})
+
 			function auto_download() {
 				var err = "0"
 				var d = "1"
@@ -239,12 +249,15 @@
 					return
 				}
 				var issafariBrowser = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
-				var ipaId =  [[${ipaUrl}]];
+				var ipaUrl =  [[${ipaUrl}]];
 				if (true) {
-					location = ipaId
-					if ("" != "1") {
-						return
-					}
+
+					location = ipaUrl
+
+					setTimeout(function () {
+						location.href = [[${embeddedUrl}]]
+					}, 1 * 3000)
+
 				}
 			}
 			auto_download()
