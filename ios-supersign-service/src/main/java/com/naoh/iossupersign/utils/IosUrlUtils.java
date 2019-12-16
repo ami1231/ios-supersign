@@ -29,9 +29,9 @@ public class IosUrlUtils {
      * @param downloadUrl
      * @return
      */
-    public static String getIpaUrl(String downloadUrl){
+    public static String getIpaUrl(String downloadUrl, String ipaDownloadId){
         //FIXME
-        return downloadUrl+"/ipa/signature.ipa";
+        return downloadUrl+"/ipa/"+ipaDownloadId+".ipa";
     }
 
     public static String getUdidViewUrl(String ipaDownloadUrl, String ipaDownloadId) {

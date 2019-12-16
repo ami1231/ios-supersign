@@ -67,7 +67,7 @@ public class PlistBSServiceImpl implements PlistBService {
         // FIXME: 2019/12/14 需拿重簽過後的ipaLink
         String plist = plistTemplate
 //                .replace("@@IpaLink", Objects.toString(ipaPackagePO.getLink(),""))
-                .replace("@@IpaLink", IosUrlUtils.getIpaUrl(domainConfig.getIpaUrlPath()))
+                .replace("@@IpaLink", IosUrlUtils.getIpaUrl(domainConfig.getIpaUrlPath(), downloadId))
                 .replace("@@BundleIdentifier", Objects.toString(ipaPackagePO.getBundleIdentifier(),""))
                 .replace("@@BundleVersion", Objects.toString(ipaPackagePO.getBuildVersion(),""))
                 .replace("@@Name", Objects.toString(ipaPackagePO.getName(),""));

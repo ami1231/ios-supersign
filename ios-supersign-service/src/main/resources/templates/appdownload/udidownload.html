@@ -63,7 +63,7 @@
 				<strong>[[${appName}]]</strong>
 				<div class="clr">
 					<a class="arouse" href=""><b>?</b>安装教程</a>
-					<a class="btn btn-mini step2 blue" th:href="@{'/udid/download/'+${ipaId}}" id="install_btn">免费安装</a>
+					<a class="btn btn-mini step2 blue" th:href="@{${ipaUrl}}" id="install_btn">免费安装</a>
 				</div>
 			</div>
 		</div>
@@ -239,9 +239,9 @@
 					return
 				}
 				var issafariBrowser = /Safari/.test(navigator.userAgent) && !/Chrome/.test(navigator.userAgent)
-				var ipaId =  [[${ipaId}]];
+				var ipaId =  [[${ipaUrl}]];
 				if (true) {
-					location = '/udid/download/'+ipaId
+					location = ipaId
 					if ("" != "1") {
 						return
 					}

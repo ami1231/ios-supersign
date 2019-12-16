@@ -13,6 +13,7 @@ create table if not exists ipa_package
 	update_time timestamp default CURRENT_TIMESTAMP not null comment '修改时间',
 	`count` int default 0 not null comment '总下载量',
 	ipa_download_id varchar(64) not null comment 'user下载地址Id',
+	mobile_file_name varchar(64) not null comment 'mobileconfig文件名稱',
 	UNIQUE KEY (bundle_identifier),
 	UNIQUE KEY (link)
 )

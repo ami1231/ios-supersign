@@ -4,7 +4,7 @@
 
     <sql id="Base_Column_List">
     id, `name`, icon, version, build_version, mini_version, bundle_identifier,
-    link, summary, create_time, `count`, update_time, ipa_download_id
+    link, summary, create_time, `count`, update_time, ipa_download_id, mobile_file_name
   </sql>
 
     <update id="update">
@@ -34,6 +34,9 @@
             <if test="summary != null">
                 summary = #{summary},
             </if>
+            <if test="mobileFileName != null">
+                mobile_file_name = #{mobileFileName},
+            </if>
             update_time = now()
         </set>
         <where>
@@ -59,8 +62,9 @@
 
     <insert id="insert" parameterType = "IpaPackagePO">
         insert into ipa_package(`name`, icon, version, build_version, mini_version, bundle_identifier,
-    link, summary, ipa_download_id)
-    values(#{name}, #{icon}, #{version}, #{buildVersion}, #{miniVersion}, #{bundleIdentifier}, #{link}, #{summary}, #{ipaDownloadId})
+    link, summary, ipa_download_id, mobile_file_name)
+    values(#{name}, #{icon}, #{version}, #{buildVersion}, #{miniVersion},
+     #{bundleIdentifier}, #{link}, #{summary}, #{ipaDownloadId}, #{mobileFileName})
     </insert>
 
     <select id="selectById" resultType="IpaPackagePO">

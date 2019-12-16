@@ -64,7 +64,8 @@ public class UDIDController {
         IpaPackagePO ipaPackagePO = getIpa(ipaId);
         model.addAttribute("iconPath",domainConfig.getMobileConfigUrlPath()+ipaPackagePO.getIcon());
         model.addAttribute("appName",ipaPackagePO.getName());
-        model.addAttribute("ipaId",ipaId);
+        // FIXME: 2019/12/16 修改下載位置
+        model.addAttribute("ipaUrl", "/mobileconfig/"+ipaPackagePO.getMobileFileName());
         return "appdownload/udidownload";
     }
 
