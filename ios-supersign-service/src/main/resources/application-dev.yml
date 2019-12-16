@@ -33,7 +33,7 @@ file:
   p12UploadPath: p12/
   profileUploadPath: profile/
 
-ipa:
-  download:
-    url: https://e1fc7f65.ngrok.io
-    udid-url:  https://e1fc7f65.ngrok.io
+url:
+  mobileConfig: https://e1fc7f65.ngrok.io
+  static: https://e1fc7f65.ngrok.io
+  ipa: https://e1fc7f65.ngrok.io
