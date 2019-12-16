@@ -1,3 +1,3 @@
 #!/bin/bash
 
-openssl smime -sign -in udid_temp.mobileconfig -out udid.mobileconfig -signer InnovCertificates.pem -certfile root.crt.pem -outform der -nodetach
+openssl smime -sign -in $1 -out $2 -signer $3 -certfile $4 -outform der -nodetach

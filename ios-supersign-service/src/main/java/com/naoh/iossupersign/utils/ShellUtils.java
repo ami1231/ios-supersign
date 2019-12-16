@@ -20,11 +20,12 @@ public class ShellUtils {
 
       * @return 是否执行成功
       */
-    public static boolean run(String command) throws IOException, InterruptedException {
-        Process process = Runtime.getRuntime().exec(command);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    public static boolean run(String command,String[] env) throws IOException, InterruptedException {
+        Process process = Runtime.getRuntime().exec(command,env);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
         String line;
         int exitValue = process.waitFor();
+        System.out.println(exitValue);
         while((line = reader.readLine())!= null){
             System.out.println(line);
         }
