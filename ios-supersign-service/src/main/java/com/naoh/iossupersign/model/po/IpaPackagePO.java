@@ -58,4 +58,6 @@ public class IpaPackagePO implements Serializable {
 
     private String downloadUrl;
 
+    private String mobileFileName;
+
 }

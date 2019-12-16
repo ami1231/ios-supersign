@@ -71,7 +71,7 @@ public class UDIDBSServiceImpl implements UDIDBSService {
         String fileName = "temp-udid-"+ipaPackagePO.getIpaDownloadId() + ".mobileconfig";
         FileWriter writer = new FileWriter(url.getPath()+"/"+fileName);
         writer.write(nowUdidTemplate);
-        return url.getPath()+fileName;
+        return url.getPath()+"/"+fileName;
     }
 
     /**
