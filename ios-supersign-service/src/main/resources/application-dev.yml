@@ -4,13 +4,13 @@ spring:
 
   datasource:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/signature?serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://ios-supersign-mysql:3306/signature?serverTimezone=Asia/Shanghai
       username: root
       password: qwe123
 
   redis:
       database: 0
-      host: localhost
+      host: ios-supersign-redis
       port: 6379
       password: 6dabdc717853
       lettuce:
