@@ -1,6 +1,6 @@
 version: '3'
 services:
-    mysql:
+    ios-sign-mysql:
       image: mysql:8.0.14
       ports:
         - "3306:3306"
@@ -15,7 +15,7 @@ services:
         MYSQL_ROOT_HOST: '%'
         TZ: "Asia/Shanghai"
 
-    redis:
+    ios-sign-redis:
       image: redis:5.0.3
       command: 
          ["redis-server","/usr/local/etc/redis/redis.conf"]
